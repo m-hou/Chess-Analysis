@@ -13,10 +13,12 @@ def fen():
     pgn.close()
 
     node = first_game
+    fens = []
     while not node.is_end():
         next_node = node.variation(0)
-        print(node.board().board_fen() + (" b", " w")[node.board().turn])
+        fens.append(node.board().board_fen() + (" b", " w")[node.board().turn])
         node = next_node
+    return fens
 
 def neo4j():
     """doc"""
