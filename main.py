@@ -28,11 +28,8 @@ def neo4j():
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "neo4j"))
     session = driver.session()
     fens, moves, game = parse_first_game()
-    print(len(fens), len(moves))
-    print(moves)
     session.run("MATCH (n) DETACH DELETE n")
     for i, _ in enumerate(moves):
-        print(i)
         session.run(
             "MERGE (curr:Position {fen: {currFen}})"
             "MERGE (curr) -[:Move {move: {move}}]-> (next:Position {fen: {nextFen}})"
