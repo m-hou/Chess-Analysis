@@ -15,12 +15,11 @@ def fen():
     node = first_game
     while not node.is_end():
         next_node = node.variation(0)
-        print(node.board().fen())
+        print(node.board().board_fen() + (" b", " w")[node.board().turn])
         node = next_node
 
-def main():
+def neo4j():
     """doc"""
-    #fen()
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "neo4j"))
     session = driver.session()
 
@@ -34,6 +33,11 @@ def main():
         print("%s %s" % (record["title"], record["name"]))
 
     session.close()
+
+def main():
+    """doc"""
+    fen()
+    #neo4j()
 
 if __name__ == "__main__":
     main()
