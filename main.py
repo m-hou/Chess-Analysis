@@ -29,7 +29,7 @@ def parse_first_game():
 
 def neo4j():
     """doc"""
-    driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "neo4j"))
+    driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
     session.run("MATCH (n) DETACH DELETE n")
     for fens, moves, game in parse_first_game():
