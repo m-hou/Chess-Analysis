@@ -8,38 +8,42 @@ DB_PATH = "bolt://localhost:7687"
 
 def parse_first_game():
     """doc"""
-    pgn = open(PGN_FILE)
-    first_game = chess.pgn.read_game(pgn)
-    pgn.close()
+    with open(PGN_FILE) as pgn:
+        first_game = chess.pgn.read_game(pgn)
+        counter = 0
+        while first_game != None:
+            game = first_game
+            fens = []
+            moves = []
+            while not game.is_end():
+                next_node = game.variation(0)
+                fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
+                moves.append(game.board().san(next_node.move))
+                game = next_node
+            fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
 
-    game = first_game
-    fens = []
-    moves = []
-    while not game.is_end():
-        next_node = game.variation(0)
-        fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
-        moves.append(game.board().san(next_node.move))
-        game = next_node
-    fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
-    return fens, moves, first_game
+            first_game = chess.pgn.read_game(pgn)
+            counter += 1
+            print(counter)
+            yield fens, moves, first_game
 
 def neo4j():
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "neo4j"))
     session = driver.session()
-    fens, moves, game = parse_first_game()
     session.run("MATCH (n) DETACH DELETE n")
-    for i, _ in enumerate(moves):
-        session.run(
-            "MERGE (curr:Position {fen: {currFen}})"
-            "MERGE (curr) -[:Move {move: {move}}]-> (next:Position {fen: {nextFen}})"
-            "MERGE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}})"
-            "MERGE (curr) -[:PlayedIn]-> (game)"
-            "MERGE (next) -[:PlayedIn]-> (game)",
-            {"currFen": fens[i], "nextFen": fens[i+1], "move": moves[i],
-             "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
-             "timeControl": game.headers["TimeControl"], "result": game.headers["Result"]}
-        )
+    for fens, moves, game in parse_first_game():
+        for i, _ in enumerate(moves):
+            session.run(
+                "MERGE (curr:Position {fen: {currFen}})"
+                "MERGE (curr) -[:Move {move: {move}}]-> (next:Position {fen: {nextFen}})"
+                "MERGE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}})"
+                "MERGE (curr) -[:PlayedIn]-> (game)"
+                "MERGE (next) -[:PlayedIn]-> (game)",
+                {"currFen": fens[i], "nextFen": fens[i+1], "move": moves[i],
+                 "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
+                 "timeControl": game.headers["TimeControl"], "result": game.headers["Result"]}
+            )
     session.close()
 
 def main():
