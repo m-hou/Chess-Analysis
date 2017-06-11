@@ -36,7 +36,7 @@ def neo4j():
             session.run(
                 "MERGE (curr:Position {fen: {currFen}})"
                 "MERGE (curr) -[:Move {move: {move}}]-> (next:Position {fen: {nextFen}})"
-                "MERGE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}})"
+                "CREATE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}})"
                 "MERGE (curr) -[:PlayedIn]-> (game)"
                 "MERGE (next) -[:PlayedIn]-> (game)",
                 {"currFen": fens[i], "nextFen": fens[i+1], "move": moves[i],
