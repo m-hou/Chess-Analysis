@@ -27,7 +27,7 @@ def parse_first_game(amount):
             print(counter)
             yield fens, moves, first_game
 
-def neo4j(amount):
+def insert_for_fast_query(amount):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
@@ -47,7 +47,7 @@ def neo4j(amount):
 
 def main():
     """doc"""
-    neo4j(1000)
+    insert_for_fast_query(1000)
 
 if __name__ == "__main__":
     main()
