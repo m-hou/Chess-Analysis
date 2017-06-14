@@ -28,7 +28,7 @@ def parse_games_for_fast_query(amount):
             print(counter)
             yield fens, moves, first_game
 
-def parse_games_for_space_efficiency(amount=sys.maxsize):
+def parse_games_for_space_efficiency(amount):
     """doc"""
     with open(PGN_FILE) as pgn:
         first_game = chess.pgn.read_game(pgn)
@@ -64,7 +64,7 @@ def insert_for_fast_query(amount):
             )
     session.close()
 
-def insert_for_space_efficiency(amount):
+def insert_for_space_efficiency(amount=sys.maxsize):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
@@ -98,6 +98,7 @@ def insert_for_space_efficiency(amount):
 def main():
     """doc"""
     #insert_for_fast_query(1000)
+    insert_for_space_efficiency()
 
 if __name__ == "__main__":
     main()
