@@ -6,7 +6,7 @@ from neo4j.v1 import GraphDatabase, basic_auth
 PGN_FILE = "ficsgamesdb_201701_standard2000_nomovetimes_1465638.pgn"
 DB_PATH = "bolt://localhost:7687"
 
-def parse_first_game(amount):
+def parse_games(amount):
     """doc"""
     with open(PGN_FILE) as pgn:
         first_game = chess.pgn.read_game(pgn)
@@ -31,7 +31,7 @@ def insert_for_fast_query(amount):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
-    for fens, moves, game in parse_first_game(amount):
+    for fens, moves, game in parse_games(amount):
         for i, _ in enumerate(moves):
             session.run(
                 "MERGE (curr:Position {fen: {currFen}})"
@@ -49,7 +49,7 @@ def insert_for_space_efficiency(amount):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
-    for fens, moves, game in parse_first_game(amount):
+    for fens, moves, game in parse_games(amount):
         for i, _ in enumerate(moves):
             if i == len(moves) - 1:
                     session.run(
