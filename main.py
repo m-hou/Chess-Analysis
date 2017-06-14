@@ -68,19 +68,19 @@ def insert_for_space_efficiency(amount):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
-    for fens, moves, game in parse_games(amount):
+    for fens, moves, game in parse_games_for_space_efficiency(amount):
         for i, _ in enumerate(moves):
             if i == len(moves) - 1:
-                    session.run(
+                session.run(
                     "MERGE (curr:Position {fen: {currFen}})"
                     "MERGE (next:Position {fen: {nextFen}})"
                     "MERGE (curr) -[:Move {move: {move}}]-> (next)"
                     "MERGE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}, ficsid: {ficsid}})"
                     "MERGE (next) -[:PlayedIn]-> (game)",
                     {"currFen": fens[i], "nextFen": fens[i+1], "move": moves[i],
-                    "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
-                    "timeControl": game.headers["TimeControl"], "result": game.headers["Result"],
-                    "ficsid": game.headers["FICSGamesDBGameNo"]}
+                     "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
+                     "timeControl": game.headers["TimeControl"], "result": game.headers["Result"],
+                     "ficsid": game.headers["FICSGamesDBGameNo"]}
                 )
             else:
                 session.run(
@@ -89,9 +89,9 @@ def insert_for_space_efficiency(amount):
                     "MERGE (curr) -[:Move {move: {move}}]-> (next)"
                     "MERGE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}, ficsid: {ficsid}})",
                     {"currFen": fens[i], "nextFen": fens[i+1], "move": moves[i],
-                    "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
-                    "timeControl": game.headers["TimeControl"], "result": game.headers["Result"],
-                    "ficsid": game.headers["FICSGamesDBGameNo"]}
+                     "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
+                     "timeControl": game.headers["TimeControl"], "result": game.headers["Result"],
+                     "ficsid": game.headers["FICSGamesDBGameNo"]}
                 )
     session.close()
 
