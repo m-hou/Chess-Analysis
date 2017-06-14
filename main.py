@@ -1,12 +1,13 @@
 """doc"""
 
+import sys
 import chess.pgn
 from neo4j.v1 import GraphDatabase, basic_auth
 
 PGN_FILE = "ficsgamesdb_201701_standard2000_nomovetimes_1465638.pgn"
 DB_PATH = "bolt://localhost:7687"
 
-def parse_games(amount):
+def parse_games_for_fast_query(amount):
     """doc"""
     with open(PGN_FILE) as pgn:
         first_game = chess.pgn.read_game(pgn)
@@ -27,11 +28,29 @@ def parse_games(amount):
             print(counter)
             yield fens, moves, first_game
 
+def parse_games_for_space_efficiency(amount=sys.maxsize):
+    """doc"""
+    with open(PGN_FILE) as pgn:
+        first_game = chess.pgn.read_game(pgn)
+        counter = 0
+        while first_game != None and counter < amount:
+            game = first_game
+            moves = []
+            while not game.is_end():
+                next_node = game.variation(0)
+                moves.append(game.board().san(next_node.move))
+                game = next_node
+
+            first_game = chess.pgn.read_game(pgn)
+            counter += 1
+            print(counter)
+            yield moves, first_game
+
 def insert_for_fast_query(amount):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
-    for fens, moves, game in parse_games(amount):
+    for fens, moves, game in parse_games_for_fast_query(amount):
         for i, _ in enumerate(moves):
             session.run(
                 "MERGE (curr:Position {fen: {currFen}})"
