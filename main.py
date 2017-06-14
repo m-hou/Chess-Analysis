@@ -6,12 +6,12 @@ from neo4j.v1 import GraphDatabase, basic_auth
 PGN_FILE = "ficsgamesdb_201701_standard2000_nomovetimes_1465638.pgn"
 DB_PATH = "bolt://localhost:7687"
 
-def parse_first_game():
+def parse_first_game(amount):
     """doc"""
     with open(PGN_FILE) as pgn:
         first_game = chess.pgn.read_game(pgn)
         counter = 0
-        while first_game != None:
+        while first_game != None and counter < amount:
             game = first_game
             fens = []
             moves = []
@@ -27,11 +27,11 @@ def parse_first_game():
             print(counter)
             yield fens, moves, first_game
 
-def neo4j():
+def neo4j(amount):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
-    for fens, moves, game in parse_first_game():
+    for fens, moves, game in parse_first_game(amount):
         for i, _ in enumerate(moves):
             session.run(
                 "MERGE (curr:Position {fen: {currFen}})"
@@ -47,7 +47,7 @@ def neo4j():
 
 def main():
     """doc"""
-    neo4j()
+    neo4j(1000)
 
 if __name__ == "__main__":
     main()
