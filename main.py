@@ -35,16 +35,19 @@ def parse_games_for_space_efficiency(amount):
         counter = 0
         while first_game != None and counter < amount:
             game = first_game
+            fens = []
             moves = []
             while not game.is_end():
                 next_node = game.variation(0)
+                fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
                 moves.append(game.board().san(next_node.move))
                 game = next_node
+            fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
 
             first_game = chess.pgn.read_game(pgn)
             counter += 1
             print(counter)
-            yield moves, first_game
+            yield fens, moves, first_game
 
 def insert_for_fast_query(amount):
     """doc"""
