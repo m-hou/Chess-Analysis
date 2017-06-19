@@ -29,6 +29,9 @@ def add_games_to_db(inputfile, outputfile):
             try:
                 c.execute("""INSERT INTO Eco(code)
                             VALUES (?)""", (eco_code,))
+            except IntegrityError:
+                pass
+            try:
                 c.execute("""INSERT INTO TimeControl(time, increment)
                             VALUES (?,?)""", (time, increment,))
             except IntegrityError:
