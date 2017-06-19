@@ -1,2 +1,3 @@
 *.sqlite
 *.pgn
+test_schema.txt
