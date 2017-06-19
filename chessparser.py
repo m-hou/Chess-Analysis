@@ -25,7 +25,7 @@ def add_games_to_db(inputfile, outputfile):
         curr_game = chess.pgn.read_game(pgn)
         counter = 0
         while curr_game != None and counter < 100:
-            eco_code, time, increment, result, year, month, black_elo, white_elo, gameid = fetch_game_data(curr_game)
+            result, year, month, white_elo, black_elo, eco_code, time, increment, gameid = fetch_game_data(curr_game)
             try:
                 c.execute("""INSERT INTO Eco(code)
                             VALUES (?)""", (eco_code,))
