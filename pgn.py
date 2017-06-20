@@ -84,8 +84,9 @@ def generate_games_str(file):
     """doc"""
     with open(file) as f:
         try:
+            next(f)
             while True:
-                lines = [next(f)]
+                lines = []
                 line = next(f)
                 while not line.startswith("[Event"):
                     line = next(f)
