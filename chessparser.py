@@ -11,6 +11,7 @@ def add_games_to_db(inputfile, outputfile):
     """doc"""
     conn = sqlite3.connect(outputfile)
     c = conn.cursor()
+    games_parsed = 0
     for index, game in enumerate(pgn.GameIterator(inputfile)):
         e = (game.eco,)
         time, increment = game.timecontrol.split("+")
@@ -29,9 +30,10 @@ def add_games_to_db(inputfile, outputfile):
             pass
         c.execute("""INSERT INTO Games
                     VALUES (?,?,?,?,?,?,?,?,?)""", g)
-        counter = index + 1
-        if counter % 100 == 0:
-            print(counter)
+        games_parsed = index + 1
+        if games_parsed % 100 == 0:
+            print(games_parsed)
+    print(str(games_parsed) + " games parsed")
     conn.commit()
     conn.close()
 
