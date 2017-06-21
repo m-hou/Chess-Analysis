@@ -83,18 +83,15 @@ class PGNGame(object):
 def generate_games_str(file):
     """doc"""
     with open(file) as f:
-        try:
-            next(f)
-            while True:
+        lines = []
+        counter = 0
+        for line in f:
+            if line.startswith("[Event"):
                 lines = []
-                line = next(f)
-                while not line.startswith("[Event"):
-                    line = next(f)
-                    if line != "\n":
-                        lines.append(line)
+            if line != "\n":
+                lines.append(line)
+            if line.startswith("1. "):
                 yield loads("".join(lines))[0]
-        except StopIteration:
-            pass
 
 
 class GameIterator(object):
