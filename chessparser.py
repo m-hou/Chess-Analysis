@@ -17,7 +17,8 @@ def add_games_to_db(inputfile, outputfile):
         time, increment = game.timecontrol.split("+")
         t = (time, increment,)
         year, month, _ = game.date.split(".")
-        g = (game.result, year, month, game.whiteelo, game.blackelo, game.eco, time, increment, game.ficsgamesdbgameno,)
+        gameid = "FICS" + game.ficsgamesdbgameno
+        g = (game.result, year, month, game.whiteelo, game.blackelo, game.eco, time, increment, gameid,)
         try:
             c.execute("""INSERT INTO Eco(code)
                         VALUES (?)""", e)
