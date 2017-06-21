@@ -13,12 +13,7 @@ def add_games_to_db(inputfile, outputfile):
     c = conn.cursor()
     games_parsed = 0
     for index, game in enumerate(pgn.GameIterator(inputfile)):
-        e = (game.eco,)
-        time, increment = game.timecontrol.split("+")
-        t = (time, increment,)
-        year, month, _ = game.date.split(".")
-        gameid = "FICS" + game.ficsgamesdbgameno
-        g = (game.result, year, month, game.whiteelo, game.blackelo, game.eco, time, increment, gameid,)
+        e, t, g = parse_games(game)
         try:
             c.execute("""INSERT INTO Eco(code)
                         VALUES (?)""", e)
@@ -37,6 +32,16 @@ def add_games_to_db(inputfile, outputfile):
     print(str(games_parsed) + " games parsed")
     conn.commit()
     conn.close()
+
+def parse_games(game):
+    e = (game.eco,)
+    time, increment = game.timecontrol.split("+")
+    t = (time, increment,)
+    year, month, _ = game.date.split(".")
+    gameid = "FICS" + game.ficsgamesdbgameno
+    g = (game.result, year, month, game.whiteelo, game.blackelo,
+         game.eco, time, increment, gameid,)
+    return e, t, g
 
 def main():
     """doc"""
