@@ -15,11 +15,6 @@ def add_games_to_db(inputfile, outputfile):
     for index, game in enumerate(pgn.GameIterator(inputfile)):
         e, t, g = parse_games(game)
         try:
-            c.execute("""INSERT INTO Eco(code)
-                        VALUES (?)""", e)
-        except IntegrityError:
-            pass
-        try:
             c.execute("""INSERT INTO TimeControl(time, increment)
                         VALUES (?,?)""", t)
         except IntegrityError:
