@@ -88,7 +88,7 @@ def eco_mapping(char, number):
     elif char == "C":
         if 0 <= number <= 19:
             opening_name = "French defence"
-            opening_sequence = "e4, c5"
+            opening_sequence = "e4, e6"
         elif 0 <= number <= 20:
             opening_name = "King's pawn game"
             opening_sequence = "e4, e5"
@@ -112,7 +112,7 @@ def eco_mapping(char, number):
             opening_sequence = "e4, e5, Nf3, d6"
         elif 42 <= number <= 43:
             opening_name = "Petrov's defence"
-            opening_name = "e4, e5, Nf3, Nf6"
+            opening_sequence = "e4, e5, Nf3, Nf6"
         elif number == 44:
             opening_name = "King's pawn game"
             opening_sequence = "e4, e5, Nf3, Nc6"
