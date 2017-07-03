@@ -39,7 +39,8 @@ def query_play_rate():
                 SUM(CASE WHEN Games.gameid IS NULL THEN 0 ELSE 1 END) AS frequency
             FROM Eco, EloRanges
             LEFT JOIN Games ON Games.code = Eco.code AND
-            Games.blackElo >= EloRanges.elo and Games.blackElo < EloRanges.elo + ?
+            (Games.blackElo + Games.whiteElo) / 2 >= EloRanges.elo AND
+            (Games.blackElo + Games.whiteElo) / 2 < EloRanges.elo + ?
             GROUP BY EloRanges.elo, Eco.openingName
         ) GROUP BY opening
         ORDER BY SUM(frequency) DESC LIMIT 20
