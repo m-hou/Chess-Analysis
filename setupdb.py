@@ -217,6 +217,51 @@ def main():
     """doc"""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
+    c.execute("pragma foreign_keys=ON")
+    try:
+        c.execute(
+            """
+            CREATE TABLE Eco (
+                code STRING not null,
+                openingName STRING not null,
+                openingSequence STRING not null,
+                PRIMARY KEY (code));
+            """
+        )
+    except sqlite3.OperationalError:
+        pass
+    try:
+        c.execute(
+            """
+            CREATE TABLE TimeControl (
+                time INTEGER not null,
+                increment INTEGER not null,
+                formatName STRING,
+                PRIMARY KEY (time, increment));
+            """
+        )
+    except sqlite3.OperationalError:
+        pass
+    try:
+        c.execute(
+            """
+            CREATE TABLE Games (
+                result STRING not null,
+                year INTEGER not null,
+                month INTEGER not null,
+                whiteElo INTEGER not null,
+                blackElo INTEGER not null,
+                code STRING not null REFERENCES Eco(code),
+                time INTEGER not null,
+                increment INTEGER not null,
+                gameid STRING not null,
+                PRIMARY KEY (gameid),
+                FOREIGN KEY (time, increment) REFERENCES TimeControl(time, increment))
+            """
+        )
+    except sqlite3.OperationalError:
+        pass
+    conn.commit()
     for char in "ABCDE":
         for number in range(100):
             c.execute("""INSERT INTO Eco
