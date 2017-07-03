@@ -4,7 +4,7 @@ import sqlite3
 from sqlite3 import IntegrityError
 import pgn
 
-PGN_FILE = "ficsgamesdb_201701_standard2000_nomovetimes_1465638.pgn"
+PGN_FILE = "ficsgamesdb_201701_chess_nomovetimes_1477065.pgn"
 DB_PATH = "chess.sqlite"
 
 def add_games_to_db(inputfile, outputfile):
