@@ -1,6 +1,7 @@
 """doc"""
 
 import sqlite3
+import tools
 
 DB_PATH = "chess.sqlite"
 MIN_ELO = 0
@@ -16,6 +17,7 @@ def query_db(query, *args):
     conn.commit()
     conn.close()
 
+@tools.timedcall
 def query_play_rate():
     """doc"""
     query_db(
