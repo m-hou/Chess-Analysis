@@ -1,21 +1,30 @@
 """doc"""
 
+import json
 import sqlite3
 import tools
 
 DB_PATH = "chess.sqlite"
+OUT_FILE = "data.json"
 MIN_ELO = 0
 MAX_ELO = 3000
 INCREMENT = 25
 
 def query_db(query, *args):
     """doc"""
+    def parse_freq_str(freq_str):
+        elos = range(MIN_ELO, MAX_ELO + INCREMENT, INCREMENT)
+        freqs = map(int, freq_str.split(","))
+        return list(zip(elos, freqs))
+
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(query, *args)
-    print(c.fetchall())
+    data = [dict(key=opening, values=parse_freq_str(freq_str)) for opening, freq_str in c.fetchall()]
     conn.commit()
     conn.close()
+    with open(OUT_FILE, 'w') as outfile:
+        json.dump(data, outfile)
 
 @tools.timedcall
 def query_play_rate():
