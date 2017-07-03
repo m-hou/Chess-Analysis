@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="assets/nv.d3.min.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+    <script src="assets/nv.d3.min.js"></script>
+
+    <style>
+        text {
+            font: 12px sans-serif;
+        }
+        svg {
+            display: block;
+        }
+        html, body, svg {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<svg id="chart1"></svg>
+
+<script>
+d3.json("data.json", function(data) {
+    var colors = d3.scale.category20();
+    var chart;
+
+    nv.addGraph(function() {
+        chart = nv.models.stackedAreaWithFocusChart()
+            .useInteractiveGuideline(true)
+            .x(function(d) { return d[0] })
+            .y(function(d) { return d[1] })
+            .controlLabels({stacked: "Stacked"})
+            .duration(300);
+        chart.brushExtent([1225425600000, 1285819200000]);
+
+        chart.xAxis.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+        chart.x2Axis.tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+        chart.yAxis.tickFormat(d3.format(',.4f'));
+        chart.y2Axis.tickFormat(d3.format(',.4f'));
+
+        d3.select('#chart1')
+            .datum(data)
+            .transition().duration(1000)
+            .call(chart)
+            .each('start', function() {
+                setTimeout(function() {
+                    d3.selectAll('#chart1 *').each(function() {
+                        if(this.__transition__)
+                            this.__transition__.duration = 1;
+                    })
+                }, 0)
+            });
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+});
+
+</script>
+</body>
+</html>
