@@ -13,14 +13,20 @@ def add_games_to_db(inputfile, outputfile):
     c = conn.cursor()
     games_inserted = 0
     for index, game in enumerate(pgn.GameIterator(inputfile)):
-        e, t, g = parse_games(game)
         try:
-            c.execute("""INSERT INTO TimeControl(time, increment)
-                        VALUES (?,?)""", t)
-        except IntegrityError:
+            e, t, g = parse_games(game)
+            try:
+                c.execute("""INSERT INTO TimeControl(time, increment)
+                            VALUES (?,?)""", t)
+            except IntegrityError:
+                pass
+            try:
+                c.execute("""INSERT INTO Games
+                            VALUES (?,?,?,?,?,?,?,?,?)""", g)
+            except IntegrityError:
+                pass
+        except AttributeError:
             pass
-        c.execute("""INSERT INTO Games
-                    VALUES (?,?,?,?,?,?,?,?,?)""", g)
         games_inserted = index + 1
         if games_inserted % 100 == 0:
             print(games_inserted)
