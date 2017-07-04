@@ -1,4 +1,4 @@
-d3.json("data.json", function(data) {
+d3.json("assets/data_chart1.json", function(data) {
     var colors = d3.scale.category20();
     var chart;
 
