@@ -10,18 +10,13 @@ MIN_ELO = 0
 MAX_ELO = 3000
 INCREMENT = 25
 
-def query_db(query, *args):
+def query_db(query, parser, *args):
     """doc"""
-    def parse_freq_str(freq_str):
-        elos = range(MIN_ELO, MAX_ELO + INCREMENT, INCREMENT)
-        freqs = map(int, freq_str.split(","))
-        return list(zip(elos, freqs))
 
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(query, *args)
-    data = [dict(key=opening, values=parse_freq_str(freq_str)) for opening, freq_str in c.fetchall()]
-    conn.commit()
+    data = parser(c.fetchall())
     conn.close()
     with open(OUT_FILE, 'w') as outfile:
         json.dump(data, outfile)
@@ -29,6 +24,17 @@ def query_db(query, *args):
 @tools.timedcall
 def query_play_rate():
     """doc"""
+    def play_rate_parser(raw_data):
+        """doc"""
+        def parse_freq_str(freq_str):
+            """doc"""
+            elos = range(MIN_ELO, MAX_ELO + INCREMENT, INCREMENT)
+            freqs = map(int, freq_str.split(","))
+            return list(zip(elos, freqs))
+
+        return [dict(key=opening, values=parse_freq_str(freq_str))
+                for opening, freq_str in raw_data]
+
     query_db(
         """
         SELECT opening, GROUP_CONCAT(frequency) frequency
@@ -45,6 +51,7 @@ def query_play_rate():
         ) GROUP BY opening
         ORDER BY SUM(frequency) DESC LIMIT 20
         """,
+        play_rate_parser,
         (MIN_ELO, INCREMENT, MAX_ELO, INCREMENT))
 
 def main():
