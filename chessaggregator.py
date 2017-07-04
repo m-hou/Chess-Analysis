@@ -5,7 +5,7 @@ import sqlite3
 import tools
 
 DB_PATH = "chess.sqlite"
-OUT_FILE = "data.json"
+OUT_FILE = "assets/data_chart2.json"
 MIN_ELO = 0
 MAX_ELO = 3000
 INCREMENT = 25
