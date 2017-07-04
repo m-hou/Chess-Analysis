@@ -1,17 +1,18 @@
 html {
     margin: 0 auto;
     width: 80%;
-
 }
 text {
     font: 12px sans-serif;
-}
-svg {
-    display: block;
 }
 body, svg {
     margin: 0px;
     padding: 0px;
     height: 100vh;
     width: 100%;
+}
+svg {
+    display: block;
+    margin-top: 10em;
+    margin-bottom: 10em;
 }
