@@ -3,7 +3,8 @@ d3.json("assets/data_chart2.json", function(data) {
         generate: function() {
             var chart = nv.models.multiBarChart()
                 .stacked(true)
-                .useInteractiveGuideline(true);
+                .useInteractiveGuideline(true)
+                .showControls(false);
             var svg = d3.select('#chart2').datum(data);
             svg.transition().duration(0).call(chart);
 
