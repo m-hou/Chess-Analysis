@@ -64,16 +64,23 @@ def query_win_rate():
                      values=[dict(x=opening, y=count)
                              for opening, count in stat_iter])
                 for result, stat_iter in zip(["White wins", "Draws", "Black wins"], [zip(opening, wins), zip(opening, draws), zip(opening, losses)])]
+
     query_db(
         """
-        SELECT Eco.openingName,
-        SUM(CASE WHEN Result = "1-0" THEN 1 ELSE 0 END) AS wins,
-        SUM(CASE WHEN RESULT = "1/2-1/2" THEN 1 ELSE 0 END) as ties,
-        SUM(CASE WHEN RESULT = "0-1" THEN 1 ELSE 0 END) as losses
-        FROM Games
-        INNER JOIN Eco ON Games.code = Eco.code
-        GROUP BY Eco.openingName
-        ORDER BY ((wins + ties / 2) * 1.0 / (wins + ties + losses)) DESC LIMIT 20
+        SELECT openingName,
+        wins * 1.0 / (wins + ties + losses) AS winrate,
+        ties * 1.0 / (wins + ties + losses) AS tierate,
+        losses * 1.0 / (wins + ties + losses) AS lossrate
+        FROM (
+            SELECT Eco.openingName,
+            SUM(CASE WHEN Result = "1-0" THEN 1 ELSE 0 END) wins,
+            SUM(CASE WHEN RESULT = "1/2-1/2" THEN 1 ELSE 0 END) ties,
+            SUM(CASE WHEN RESULT = "0-1" THEN 1 ELSE 0 END) losses
+            FROM Games
+            INNER JOIN Eco ON Games.code = Eco.code
+            GROUP BY Eco.openingName
+	        ORDER BY ((wins + ties / 2) * 1.0 / (wins + ties + losses)) DESC
+        )
         """,
         win_rate_parser)
 
