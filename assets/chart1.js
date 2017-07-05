@@ -11,7 +11,7 @@ d3.json("assets/data_chart1.json", function(data) {
             .duration(300);
         chart.brushExtent([1000, 2800]);
         chart.xAxis.axisLabel("Elo");
-        chart.yAxis.axisLabel("Frequency");
+        chart.yAxis.axisLabel("Games Played");
         d3.select('#chart1')
             .datum(data)
             .transition().duration(1000)
