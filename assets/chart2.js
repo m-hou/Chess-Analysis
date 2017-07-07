@@ -1,10 +1,24 @@
 d3.json("assets/data_chart2.json", function(data) {
+    var chart;
+
     nv.addGraph({
         generate: function() {
             var chart = nv.models.multiBarChart()
+                .margin({bottom: 150})
                 .stacked(true)
                 .useInteractiveGuideline(true)
-                .showControls(false);
+                .showControls(false)
+                .rotateLabels(90)
+                .reduceXTicks(false)
+
+            chart.xAxis
+                .tickFormat(function(d) {
+                    var maxLength = 20;
+                    return d.length > 20 ?
+                        d.substring(0, 17) + "..." :
+                        d;
+                })
+
             chart.color(["#EEEEEE", "#777777", "#000000"])
             chart.yAxis
                 .axisLabel("Outcome (%)")
