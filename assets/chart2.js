@@ -8,7 +8,7 @@ d3.json("assets/data_chart2.json", function(data) {
                 .stacked(true)
                 .useInteractiveGuideline(true)
                 .showControls(false)
-                .rotateLabels(90)
+                .rotateLabels(-60)
                 .reduceXTicks(false)
 
             chart.xAxis
