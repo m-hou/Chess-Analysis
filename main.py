@@ -11,7 +11,7 @@ def remove_extra_fen_info(fen):
     """doc"""
     return " ".join(fen.split(" ")[:-3])
 
-def parse_games_for_fast_query(amount):
+def parse_games(amount):
     """doc"""
     with open(PGN_FILE) as pgn:
         first_game = chess.pgn.read_game(pgn)
@@ -30,48 +30,11 @@ def parse_games_for_fast_query(amount):
             print(counter)
             yield fens, moves, first_game
 
-def parse_games_for_space_efficiency(amount):
-    """doc"""
-    with open(PGN_FILE) as pgn:
-        first_game = chess.pgn.read_game(pgn)
-        counter = 0
-        while first_game != None and counter < amount:
-            game = first_game
-            fens = [remove_extra_fen_info(chess.STARTING_FEN)]
-            moves = []
-            while not game.is_end():
-                next_node = game.variation(0)
-                fens.append(remove_extra_fen_info(next_node.comment))
-                moves.append(game.board().san(next_node.move))
-                game = next_node
-            first_game = chess.pgn.read_game(pgn)
-            counter += 1
-            print(counter)
-            yield fens, moves, first_game
-
-def insert_for_fast_query(amount):
+def insert(amount=sys.maxsize):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
-    for fens, moves, game in parse_games_for_fast_query(amount):
-        for i, _ in enumerate(moves):
-            session.run(
-                "MERGE (curr:Position {fen: {currFen}})"
-                "MERGE (curr) -[:Move {move: {move}}]-> (next:Position {fen: {nextFen}})"
-                "CREATE (game:Game {elo: {elo}, timeControl: {timeControl}, result: {result}})"
-                "MERGE (curr) -[:PlayedIn]-> (game)"
-                "MERGE (next) -[:PlayedIn]-> (game)",
-                {"currFen": fens[i], "nextFen": fens[i+1], "move": moves[i],
-                 "elo": (int(game.headers["WhiteElo"]) + int(game.headers["BlackElo"])) / 2,
-                 "timeControl": game.headers["TimeControl"], "result": game.headers["Result"]}
-            )
-    session.close()
-
-def insert_for_space_efficiency(amount=sys.maxsize):
-    """doc"""
-    driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
-    session = driver.session()
-    for fens, moves, game in parse_games_for_space_efficiency(amount):
+    for fens, moves, game in parse_games(amount):
         for i, _ in enumerate(moves):
             if i == len(moves) - 1:
                 session.run(
@@ -100,8 +63,7 @@ def insert_for_space_efficiency(amount=sys.maxsize):
 
 def main():
     """doc"""
-    #insert_for_fast_query(1000)
-    insert_for_space_efficiency()
+    insert()
 
 if __name__ == "__main__":
     main()

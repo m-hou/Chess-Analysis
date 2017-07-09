@@ -9,28 +9,6 @@ def get_best_moves():
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
     result = session.run(
-        "MATCH (:Position {fen: {fen}}) -[m:Move]-> (next:Position) -[:PlayedIn]-> (g:Game)"
-        "RETURN m.move AS move, SUM("
-            "CASE g.result "
-                "WHEN '1-0' THEN 1 "
-                "WHEN '1/2-1/2' THEN 0.5 "
-                "WHEN '0-1' THEN 0 "
-            "END"
-        ") / count(g) AS outcome",
-        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"}
-    )
-    counter = 0
-    for record in result:
-        counter += 1
-        print("%s %s" % (record["move"], record["outcome"]))
-    print(counter)
-    session.close()
-
-def get_best_moves_mem_eff():
-    """doc"""
-    driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
-    session = driver.session()
-    result = session.run(
         """
         MATCH (:Position {fen: {fen}})-[m:Move]->(next:Position)
         MATCH (next)-[*..1000]->(g:Game)
@@ -53,8 +31,7 @@ def get_best_moves_mem_eff():
 
 def main():
     """doc"""
-    #get_best_moves()
-    get_best_moves_mem_eff()
+    get_best_moves()
 
 if __name__ == "__main__":
     main()
