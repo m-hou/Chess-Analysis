@@ -17,7 +17,7 @@ def get_best_moves():
                 "WHEN '0-1' THEN 0 "
             "END"
         ") / count(g) AS outcome",
-        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w"}
+        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"}
     )
     counter = 0
     for record in result:
@@ -32,9 +32,8 @@ def get_best_moves_mem_eff():
     session = driver.session()
     result = session.run(
         """
-        MATCH (g:Game)
         MATCH (:Position {fen: {fen}})-[m:Move]->(next:Position)
-        WHERE (g)<-[*]-(next)
+        MATCH (next)-[*..1000]->(g:Game)
         return m.move AS move, SUM(
             CASE g.result
                 WHEN '1-0' THEN 1
@@ -43,7 +42,7 @@ def get_best_moves_mem_eff():
             END
          ) / count(g) AS winrate, count(g) AS freq
          ORDER BY winrate DESC""",
-        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w"}
+        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"}
     )
     counter = 0
     for record in result:
