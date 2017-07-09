@@ -4,8 +4,12 @@ import sys
 import chess.pgn
 from neo4j.v1 import GraphDatabase, basic_auth
 
-PGN_FILE = "ficsgamesdb_201701_standard2000_nomovetimes_1465638.pgn"
+PGN_FILE = "fics_201701_standard2000_fen.pgn"
 DB_PATH = "bolt://localhost:7687"
+
+def remove_extra_fen_info(fen):
+    """doc"""
+    return " ".join(fen.split(" ")[:-3])
 
 def parse_games_for_fast_query(amount):
     """doc"""
@@ -14,15 +18,13 @@ def parse_games_for_fast_query(amount):
         counter = 0
         while first_game != None and counter < amount:
             game = first_game
-            fens = []
+            fens = [remove_extra_fen_info(chess.STARTING_FEN)]
             moves = []
             while not game.is_end():
                 next_node = game.variation(0)
-                fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
+                fens.append(remove_extra_fen_info(next_node.comment))
                 moves.append(game.board().san(next_node.move))
                 game = next_node
-            fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
-
             first_game = chess.pgn.read_game(pgn)
             counter += 1
             print(counter)
@@ -35,15 +37,13 @@ def parse_games_for_space_efficiency(amount):
         counter = 0
         while first_game != None and counter < amount:
             game = first_game
-            fens = []
+            fens = [remove_extra_fen_info(chess.STARTING_FEN)]
             moves = []
             while not game.is_end():
                 next_node = game.variation(0)
-                fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
+                fens.append(remove_extra_fen_info(next_node.comment))
                 moves.append(game.board().san(next_node.move))
                 game = next_node
-            fens.append(game.board().board_fen() + (" b", " w")[game.board().turn])
-
             first_game = chess.pgn.read_game(pgn)
             counter += 1
             print(counter)
