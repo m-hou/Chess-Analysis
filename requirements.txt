@@ -1,2 +1,3 @@
 python-chess
 sqlite3
+neo4j-driver
