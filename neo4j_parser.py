@@ -4,19 +4,25 @@ import sys
 import pgn
 from neo4j.v1 import GraphDatabase, basic_auth
 
-NUMBER_OF_COMMENTS = 1
+NUMBER_OF_COMMENTS = 2
 STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w"
+STARTING_EVAL = 0.0
 PGN_FILE = "pgnfiles/output.pgn"
 DB_PATH = "bolt://localhost:7687"
 
+def parse_move(move):
+    return move
+
 def parse_fen(comment):
-    return " ".join(comment[2:-2].split(" ")[:-4])
+    return " ".join(comment[2:-2].split(" ")[:-3])
 
-def get_fens(game):
-    return [STARTING_FEN] + [parse_fen(fen) for fen in game.moves[1:-1:NUMBER_OF_COMMENTS + 1]]
+def parse_eval(comment):
+    return comment[2:-2]
 
-def get_moves(game):
-    return game.moves[:-1:NUMBER_OF_COMMENTS + 1]
+def parse_move_comments(game):
+    partitions = NUMBER_OF_COMMENTS + 1
+    return [game.moves[i:-1:partitions] for i in range(partitions)]
+
 
 def insert(amount=sys.maxsize):
     """doc"""
@@ -25,8 +31,7 @@ def insert(amount=sys.maxsize):
     for count, game in enumerate(pgn.GameIterator(PGN_FILE)):
         gameid = "FICS" + game.ficsgamesdbgameno
         result = game.result
-        fens = get_fens(game)
-        moves = get_moves(game)
+        moves, fens, evals = parse_move_comments(game)
         print(count)
         for index, _ in enumerate(moves):
             args = {"currFen": fens[index], "nextFen": fens[index+1], "move": moves[index],
