@@ -10,18 +10,27 @@ STARTING_EVAL = 0.0
 PGN_FILE = "pgnfiles/output.pgn"
 DB_PATH = "bolt://localhost:7687"
 
-def parse_move(move):
-    return move
+def transform(sequence, index):
+    """doc"""
+    def transform_moves(moves):
+        """doc"""
+        return moves
 
-def parse_fen(comment):
-    return " ".join(comment[2:-2].split(" ")[:-3])
+    def transform_fens(fens):
+        """doc"""
+        return [STARTING_FEN] + [" ".join(fen[2:-2].split(" ")[:-3]) for fen in fens]
 
-def parse_eval(comment):
-    return comment[2:-2]
+    def transform_evals(evals):
+        """doc"""
+        return [STARTING_EVAL] + [eval[2:-2] for eval in evals]
+
+    transformations = [transform_moves, transform_evals, transform_fens]
+    return transformations[index](sequence)
 
 def parse_move_comments(game):
+    """doc"""
     partitions = NUMBER_OF_COMMENTS + 1
-    return [game.moves[i:-1:partitions] for i in range(partitions)]
+    return [transform(game.moves[i:-1:partitions], i) for i in range(partitions)]
 
 
 def insert(amount=sys.maxsize):
