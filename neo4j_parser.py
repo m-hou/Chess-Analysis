@@ -31,7 +31,7 @@ def insert(amount=sys.maxsize):
     for count, game in enumerate(pgn.GameIterator(PGN_FILE)):
         gameid = "FICS" + game.ficsgamesdbgameno
         result = game.result
-        moves, fens, evals = parse_move_comments(game)
+        moves, evals, fens = parse_move_comments(game)
         print(count)
         for index, _ in enumerate(moves):
             args = {"currFen": fens[index], "nextFen": fens[index+1], "move": moves[index],
