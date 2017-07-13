@@ -5,7 +5,7 @@ import pgn
 from neo4j.v1 import GraphDatabase, basic_auth
 
 NUMBER_OF_COMMENTS = 2
-STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w"
+STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"
 STARTING_EVAL = 0.0
 PGN_FILE = "pgnfiles/output.pgn"
 DB_PATH = "bolt://localhost:7687"
