@@ -1,5 +1,6 @@
 """doc"""
 
+import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
@@ -12,6 +13,7 @@ def query_db(query, parser, args):
     parser(result)
     session.close()
 
+@tools.timedcall
 def get_next_moves():
     """doc"""
     def next_moves_parser(result):
