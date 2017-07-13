@@ -41,23 +41,31 @@ def insert(amount=sys.maxsize):
         gameid = "FICS" + game.ficsgamesdbgameno
         result = game.result
         moves, evals, fens = parse_move_comments(game)
-        print(count)
         for index, _ in enumerate(moves):
             args = {"currFen": fens[index], "nextFen": fens[index+1], "move": moves[index],
-                    "result": result, "gameid": gameid}
+                    "result": result, "gameid": gameid, "blackelo": game.blackelo,
+                    "whiteelo": game.whiteelo, "ply": index}
             if index == len(moves) - 1:
                 session.run(
-                    "MERGE (curr:Position {fen: {currFen}})"
-                    "MERGE (next:Position {fen: {nextFen}})"
-                    "MERGE (curr) -[:Move {move: {move}}]-> (next)"
-                    "MERGE (game:Game {result: {result}, gameid: {gameid}})"
-                    "MERGE (next) -[:PlayedIn]-> (game)", args)
+                    """
+                    MERGE (curr:Position {fen: {currFen}})
+                    MERGE (next:Position {fen: {nextFen}})
+                    MERGE (curr) -[:Move {move: {move}}]-> (next)
+                    MERGE (game:Game {result: {result}, gameid: {gameid}, whiteElo: {whiteelo}, blackElo: {blackelo}})
+                    MERGE (game) -[:FinalPosition]-> (next)
+                    MERGE (ply:Ply {plycount: {ply}})
+                    MERGE (ply) -[:FinalPosition]-> (curr)""", args)
             else:
                 session.run(
-                    "MERGE (curr:Position {fen: {currFen}})"
-                    "MERGE (next:Position {fen: {nextFen}})"
-                    "MERGE (curr) -[:Move {move: {move}}]-> (next)"
-                    "MERGE (game:Game {result: {result}, gameid: {gameid}})", args)
+                    """
+                    MERGE (curr:Position {fen: {currFen}})
+                    MERGE (next:Position {fen: {nextFen}})
+                    MERGE (curr) -[:Move {move: {move}}]-> (next)
+                    MERGE (game:Game {result: {result}, gameid: {gameid}, whiteElo: {whiteelo}, blackElo: {blackelo}})
+                    MERGE (game) -[:HasPosition]-> (next)
+                    MERGE (ply:Ply {plycount: {ply}})
+                    MERGE (ply) -[:HasPosition]-> (curr)""", args)
+        print(count)
     session.close()
 
 def main():
