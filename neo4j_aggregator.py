@@ -12,13 +12,13 @@ def get_next_moves():
         """
         MATCH (:Position {fen: {fen}})-[m:Move]->(next:Position)
         MATCH (next)-[:Move*..1000]->()<-[:FinalPosition]-(g:Game) WITH DISTINCT g, m
-        RETURN m.move AS move, SUM(
+        RETURN m.move AS move, AVG(
             CASE g.result
                 WHEN '1-0' THEN 1
                 WHEN '1/2-1/2' THEN 0.5
                 WHEN '0-1' THEN 0
             END
-        ) / count(g) AS winrate, count(g) AS freq""",
+        ) AS winrate, count(g) AS freq""",
         {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"}
     )
     counter = 0
