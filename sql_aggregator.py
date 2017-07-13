@@ -12,7 +12,6 @@ INCREMENT = 25
 
 def query_db(query, parser, *args):
     """doc"""
-
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute(query, *args)
