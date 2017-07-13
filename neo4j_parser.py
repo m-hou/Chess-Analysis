@@ -54,7 +54,7 @@ def insert(amount=sys.maxsize):
                     MERGE (curr) -[:Move {move: {move}}]-> (next)
                     MERGE (game:Game {result: {result}, gameid: {gameid}, whiteElo: {whiteelo}, blackElo: {blackelo}})
                     MERGE (game) -[:FinalPosition]-> (next)
-                    MERGE (ply:Ply {plycount: {ply}})
+                    MERGE (ply:Ply {moveNumber: {ply}})
                     MERGE (ply) -[:FinalPosition]-> (curr)""", args)
             else:
                 session.run(
@@ -64,7 +64,7 @@ def insert(amount=sys.maxsize):
                     MERGE (curr) -[:Move {move: {move}}]-> (next)
                     MERGE (game:Game {result: {result}, gameid: {gameid}, whiteElo: {whiteelo}, blackElo: {blackelo}})
                     MERGE (game) -[:HasPosition]-> (next)
-                    MERGE (ply:Ply {plycount: {ply}})
+                    MERGE (ply:Ply {moveNumber: {ply}})
                     MERGE (ply) -[:HasPosition]-> (curr)""", args)
         print(count + 1)
         if count + 1 >= amount:
@@ -73,7 +73,7 @@ def insert(amount=sys.maxsize):
 
 def main():
     """doc"""
-    insert(5)
+    insert()
 
 if __name__ == "__main__":
     main()
