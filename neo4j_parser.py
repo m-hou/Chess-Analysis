@@ -42,14 +42,15 @@ def insert(amount=sys.maxsize):
         result = game.result
         moves, evals, fens = parse_move_comments(game)
         for index, _ in enumerate(moves):
-            args = {"currFen": fens[index], "nextFen": fens[index+1], "move": moves[index],
-                    "result": result, "gameid": gameid, "blackelo": game.blackelo,
-                    "whiteelo": game.whiteelo, "ply": index}
+            args = {"currFen": fens[index], "currEval": evals[index],
+                    "nextFen": fens[index+1], "nextEval" :evals[index+1],
+                    "move": moves[index], "result": result, "gameid": gameid,
+                    "blackelo": game.blackelo, "whiteelo": game.whiteelo, "ply": index}
             if index == len(moves) - 1:
                 session.run(
                     """
-                    MERGE (curr:Position {fen: {currFen}})
-                    MERGE (next:Position {fen: {nextFen}})
+                    MERGE (curr:Position {fen: {currFen}, eval: {currEval}})
+                    MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
                     MERGE (curr) -[:Move {move: {move}}]-> (next)
                     MERGE (game:Game {result: {result}, gameid: {gameid}, whiteElo: {whiteelo}, blackElo: {blackelo}})
                     MERGE (game) -[:FinalPosition]-> (next)
