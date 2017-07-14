@@ -45,7 +45,7 @@ def insert(amount=sys.maxsize):
             args = {"currFen": fens[index], "currEval": evals[index],
                     "nextFen": fens[index+1], "nextEval" :evals[index+1],
                     "move": moves[index], "result": result, "gameid": gameid,
-                    "blackelo": game.blackelo, "whiteelo": game.whiteelo, "ply": index}
+                    "blackelo": game.blackelo, "whiteelo": game.whiteelo, "ply": index + 1}
             if index == len(moves) - 1:
                 session.run(
                     """
