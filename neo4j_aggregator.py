@@ -1,17 +1,21 @@
 """doc"""
 
+import json
 import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
+OUT_FILE = "assets/data_chart3.json"
 
 def query_db(query, parser, args=None):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
     result = session.run(query, args)
-    parser(result)
+    data = parser(result)
     session.close()
+    with open(OUT_FILE, 'w') as outfile:
+        json.dump(data, outfile)
 
 @tools.timedcall
 def get_next_moves():
@@ -63,13 +67,16 @@ def get_eval_percentiles_by_elo():
     """doc"""
     def eval_percentiles_by_elo_parser(result):
         """doc"""
-        counter = 0
-        for record in result:
-            counter += 1
-            print("%s %s %s %s %s %s" %
-                  (record["bucket"], record["max"], record["percentile75"],
-                   record["percentile50"], record["percentile25"], record["min"]))
-        print(counter)
+        def parse_record(record):
+            """doc"""
+            return dict(Q1=record["percentile25"],
+                        Q2=record["percentile50"],
+                        Q3=record["percentile75"],
+                        whisker_low=record["min"],
+                        whisker_high=record["max"])
+
+        return [dict(label=record["bucket"], values=parse_record(record))
+                for record in list(result)]
 
     query_db(
         """
