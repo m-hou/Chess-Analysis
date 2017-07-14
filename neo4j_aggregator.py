@@ -81,7 +81,7 @@ def get_eval_percentiles_by_elo():
     query_db(
         """
         MATCH (g:Game)-[:HasPosition|:FinalPosition]->(p:Position) WITH g, TOFLOAT(p.eval) AS Eval
-        RETURN TOINTEGER(g.whiteElo)/25 AS bucket,
+        RETURN TOINTEGER(g.whiteElo)/100 AS bucket,
         max(Eval) as max,
         percentileCont(Eval, .75) AS percentile75,
         percentileCont(Eval, .50) AS percentile50,
@@ -93,8 +93,6 @@ def get_eval_percentiles_by_elo():
 
 def main():
     """doc"""
-    get_next_moves()
-    get_avg_eval_by_ply()
     get_eval_percentiles_by_elo()
 
 if __name__ == "__main__":
