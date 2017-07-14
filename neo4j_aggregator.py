@@ -5,7 +5,7 @@ from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
 
-def query_db(query, parser, args):
+def query_db(query, parser, args=None):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
@@ -39,9 +39,28 @@ def get_next_moves():
         {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"}
     )
 
+@tools.timedcall
+def get_avg_eval_by_ply():
+    """doc"""
+    def avg_eval_by_ply_parser(result):
+        """doc"""
+        counter = 0
+        for record in result:
+            counter += 1
+            print("%s %s" % (record["Ply"], record["AverageEval"]))
+        print(counter)
+
+    query_db(
+        """
+        MATCH (p:Ply)-[:HasPosition]->(pos:Position)
+        RETURN p.moveNumber AS Ply, AVG(TOFLOAT(pos.eval)) AS AverageEval
+        ORDER BY p.moveNumber""",
+        avg_eval_by_ply_parser
+    )
+
 def main():
     """doc"""
-    get_next_moves()
+    get_avg_eval_by_ply()
 
 if __name__ == "__main__":
     main()
