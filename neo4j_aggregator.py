@@ -58,9 +58,35 @@ def get_avg_eval_by_ply():
         avg_eval_by_ply_parser
     )
 
+@tools.timedcall
+def get_eval_percentiles_by_elo():
+    """doc"""
+    def eval_percentiles_by_elo_parser(result):
+        """doc"""
+        counter = 0
+        for record in result:
+            counter += 1
+            print("%s %s %s %s %s %s" %
+                  (record["Bucket"], record["Max"], record["Percentile75"],
+                   record["Percentile50"], record["Percentile25"], record["Min"]))
+        print(counter)
+
+    query_db(
+        """
+        MATCH (g:Game)-[:HasPosition|:FinalPosition]->(p:Position) WITH g, TOFLOAT(p.eval) AS Eval
+        RETURN TOINTEGER(g.whiteElo)/25 AS Bucket,
+        max(Eval) as Max,
+        percentileCont(Eval, .75) AS Percentile75,
+        percentileCont(Eval, .50) AS Percentile50,
+        percentileCont(Eval, .25) AS Percentile25,
+        min(Eval) AS Min
+        ORDER BY Bucket""",
+        eval_percentiles_by_elo_parser
+    )
+
 def main():
     """doc"""
-    get_avg_eval_by_ply()
+    get_eval_percentiles_by_elo()
 
 if __name__ == "__main__":
     main()
