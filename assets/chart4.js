@@ -11,17 +11,12 @@ d3.json("assets/data_chart4.json", function(data) {
 
         // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly, return themselves, not the parent chart, so need to chain separately
         chart.xAxis
-            .axisLabel("Time (s)")
-            .tickFormat(d3.format(',.1f'))
-            .staggerLabels(true);
+            .axisLabel("Ply")
 
         chart.yAxis
-            .axisLabel('Voltage (v)')
+            .axisLabel('Evaluation')
             .tickFormat(function (d) {
-                if (d == null) {
-                    return 'N/A';
-                }
-                return d3.format(',.2f')(d);
+                return d3.format(',.3f')(d);
             });
 
         d3.select('#chart4')
