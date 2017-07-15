@@ -5,7 +5,7 @@ import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
-OUT_FILE = "assets/data_chart3.json"
+OUT_FILE = "assets/data_chart4.json"
 
 def query_db(query, parser, args=None):
     """doc"""
@@ -48,11 +48,8 @@ def get_avg_eval_by_ply():
     """doc"""
     def avg_eval_by_ply_parser(result):
         """doc"""
-        counter = 0
-        for record in result:
-            counter += 1
-            print("%s %s" % (record["ply"], record["averageEval"]))
-        print(counter)
+        return [dict(values=[dict(x=record["ply"], y=record["averageEval"])
+                             for record in list(result)])]
 
     query_db(
         """
@@ -93,7 +90,7 @@ def get_eval_percentiles_by_elo():
 
 def main():
     """doc"""
-    get_eval_percentiles_by_elo()
+    get_avg_eval_by_ply()
 
 if __name__ == "__main__":
     main()
