@@ -5,7 +5,7 @@ import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
-OUT_FILE = "assets/data_chart4.json"
+OUT_FILE = "assets/data_chart3.json"
 
 def query_db(query, parser, args=None):
     """doc"""
@@ -60,9 +60,9 @@ def get_avg_eval_by_ply():
     )
 
 @tools.timedcall
-def get_eval_percentiles_by_elo():
+def get_eval_range_by_time_control():
     """doc"""
-    def eval_percentiles_by_elo_parser(result):
+    def eval_range_by_time_control_parser(result):
         """doc"""
         def parse_record(record):
             """doc"""
@@ -72,25 +72,26 @@ def get_eval_percentiles_by_elo():
                         whisker_low=record["min"],
                         whisker_high=record["max"])
 
-        return [dict(label=record["bucket"], values=parse_record(record))
+        return [dict(label=record["timeControl"], values=parse_record(record))
                 for record in list(result)]
 
     query_db(
         """
-        MATCH (g:Game)-[:HasPosition|:FinalPosition]->(p:Position) WITH g, TOFLOAT(p.eval) AS Eval
-        RETURN TOINTEGER(g.whiteElo)/100 AS bucket,
-        max(Eval) as max,
-        percentileCont(Eval, .75) AS percentile75,
-        percentileCont(Eval, .50) AS percentile50,
-        percentileCont(Eval, .25) AS percentile25,
-        min(Eval) AS min
-        ORDER BY bucket""",
-        eval_percentiles_by_elo_parser
+        MATCH (g:Game)-[:HasPosition|:FinalPosition]->(p:Position)
+            WITH g, max(TOFLOAT(p.eval)) - min(TOFLOAT(p.eval)) AS EvalRange
+        RETURN
+        g.timecontrol AS timeControl,
+        max(EvalRange) as max,
+        percentileCont(EvalRange, .75) AS percentile75,
+        percentileCont(EvalRange, .50) AS percentile50,
+        percentileCont(EvalRange, .25) AS percentile25,
+        min(EvalRange) AS min""",
+        eval_range_by_time_control_parser
     )
 
 def main():
     """doc"""
-    get_avg_eval_by_ply()
+    get_eval_range_by_time_control()
 
 if __name__ == "__main__":
     main()
