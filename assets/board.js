@@ -67,6 +67,10 @@ var onSnapEnd = function () {
     board.position(game.fen());
 };
 
+var onChange = function(oldPos, newPos) {
+  console.log(game.fen());
+};
+
 var cfg = {
     draggable: true,
     position: 'start',
@@ -74,6 +78,7 @@ var cfg = {
     onDrop: onDrop,
     onMouseoutSquare: onMouseoutSquare,
     onMouseoverSquare: onMouseoverSquare,
-    onSnapEnd: onSnapEnd
+    onSnapEnd: onSnapEnd,
+    onChange: onChange
 };
 board = ChessBoard('board', cfg);
