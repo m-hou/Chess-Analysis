@@ -5,7 +5,7 @@ import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
-OUT_FILE = "assets/data_chart3.json"
+OUT_FILE = "assets/data_chart5.json"
 
 def query_db(query, parser, args=None):
     """doc"""
