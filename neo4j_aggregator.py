@@ -22,11 +22,13 @@ def get_next_moves():
     """doc"""
     def next_moves_parser(result):
         """doc"""
-        counter = 0
-        for record in result:
-            counter += 1
-            print("%s %s %s" % (record["move"], record["winRate"], record["freq"]))
-        print(counter)
+        return [dict(key="a",
+                     values=[dict(x=record["winRate"],
+                                  y=record["freq"],
+                                  size=1,
+                                  shape="square",
+                                  data="test")
+                             for record in list(result)])]
 
     query_db(
         """
