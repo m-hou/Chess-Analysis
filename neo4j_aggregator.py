@@ -40,7 +40,7 @@ def get_next_moves():
             END
         ) AS winRate, count(g) AS freq""",
         next_moves_parser,
-        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"}
+        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"}
     )
 
 @tools.timedcall
@@ -91,7 +91,7 @@ def get_eval_range_by_time_control():
 
 def main():
     """doc"""
-    get_eval_range_by_time_control()
+    get_next_moves()
 
 if __name__ == "__main__":
     main()

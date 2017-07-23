@@ -5,7 +5,7 @@ import pgn
 from neo4j.v1 import GraphDatabase, basic_auth
 
 NUMBER_OF_COMMENTS = 2
-STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"
+STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"
 STARTING_EVAL = 0.0
 PGN_FILE = "pgnfiles/output.pgn"
 DB_PATH = "bolt://localhost:7687"
@@ -18,7 +18,7 @@ def transform(sequence, index):
 
     def transform_fens(fens):
         """doc"""
-        return [STARTING_FEN] + [" ".join(fen[2:-2].split(" ")[:-3]) for fen in fens]
+        return [STARTING_FEN] + [" ".join(fen[2:-2].split(" ")[:-2]) for fen in fens]
 
     def transform_evals(evals):
         """doc"""
@@ -82,7 +82,7 @@ def insert(amount=sys.maxsize):
 
 def main():
     """doc"""
-    insert(100)
+    insert(300)
 
 if __name__ == "__main__":
     main()
