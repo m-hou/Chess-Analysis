@@ -22,13 +22,15 @@ def get_next_moves():
     """doc"""
     def next_moves_parser(result):
         """doc"""
+        values = list(result)
+        games_played = sum(record["freq"] for record in values)
         return [dict(key="a",
                      values=[dict(x=record["winRate"],
-                                  y=record["freq"],
+                                  y=record["freq"]/games_played,
                                   size=1,
                                   shape="square",
                                   data="test")
-                             for record in list(result)])]
+                             for record in values])]
 
     query_db(
         """
