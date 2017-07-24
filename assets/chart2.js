@@ -1,18 +1,20 @@
-d3.json("assets/data_chart2.json", function(data) {
+d3.json("assets/data_chart2.json", function (data) {
     var chart;
 
     nv.addGraph({
-        generate: function() {
+        generate: function () {
             var chart = nv.models.multiBarChart()
-                .margin({bottom: 150})
+                .margin({ bottom: 150 })
                 .stacked(true)
                 .useInteractiveGuideline(true)
                 .showControls(false)
                 .rotateLabels(-60)
                 .reduceXTicks(false)
-
+            chart.interactiveLayer.tooltip.valueFormatter(function(d) {
+                return (d * 100).toFixed(2) + "%"
+            })
             chart.xAxis
-                .tickFormat(function(d) {
+                .tickFormat(function (d) {
                     var maxLength = 20;
                     return d.length > 20 ?
                         d.substring(0, 17) + "..." :
