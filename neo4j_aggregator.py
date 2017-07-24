@@ -1,7 +1,9 @@
 """doc"""
 
+import itertools
 import json
 import tools
+from collections import defaultdict
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
@@ -17,20 +19,36 @@ def query_db(query, parser, args=None):
     with open(OUT_FILE, 'w') as outfile:
         json.dump(data, outfile)
 
+
 @tools.timedcall
 def get_next_moves():
     """doc"""
     def next_moves_parser(result):
         """doc"""
+        def classify_move(move):
+            """doc"""
+            if "x" in move:
+                return "Capture"
+            elif move == "O-O" or move == "O-O-O":
+                return "Castling"
+            elif len(move) == 2:
+                return "Pawn Push"
+            else:
+                return "Move"
+
         values = list(result)
         games_played = sum(record["freq"] for record in values)
-        return [dict(key="a",
-                     values=[dict(x=record["winRate"],
-                                  y=record["freq"]/games_played,
-                                  size=1,
-                                  shape="square",
-                                  data="test")
-                             for record in values])]
+        point_attributes = [dict(key=classify_move(record["move"]),
+                                 value=dict(x=record["winRate"],
+                                            y=record["freq"] / games_played,
+                                            size=1,
+                                            shape="square",
+                                            move=record["move"]))
+                            for record in values]
+        d = defaultdict(list)
+        for point_attribute in point_attributes:
+            d[point_attribute["key"]].append(point_attribute["value"])
+        return [dict(key=k, values=v) for k, v in d.items()]
 
     query_db(
         """
