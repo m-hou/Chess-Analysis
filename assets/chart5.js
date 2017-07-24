@@ -11,8 +11,12 @@ d3.json("assets/data_chart5.json", function (data) {
             .pointRange([100,100])
             .duration(300);
 
-        chart.xAxis.tickFormat(d3.format('.02f'));
-        chart.yAxis.tickFormat(d3.format('.02f'));
+        chart.xAxis
+            .axisLabel('Play Rate (%)')
+            .tickFormat(d3.format(',.02%'));
+        chart.yAxis
+            .axisLabel('Win Rate (%)')
+            .tickFormat(d3.format(',.02%'));
 
         d3.select('#chart5')
             .datum(data)
