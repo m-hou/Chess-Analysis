@@ -1,9 +1,8 @@
 """doc"""
 
-import itertools
 import json
-import tools
 from collections import defaultdict
+import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
