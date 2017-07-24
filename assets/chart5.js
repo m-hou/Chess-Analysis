@@ -8,6 +8,7 @@ d3.json("assets/data_chart5.json", function (data) {
             .showDistY(true)
             .useVoronoi(true)
             .color(d3.scale.category10().range())
+            .pointRange([100,100])
             .duration(300);
 
         chart.xAxis.tickFormat(d3.format('.02f'));
