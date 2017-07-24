@@ -39,8 +39,8 @@ def get_next_moves():
         values = list(result)
         games_played = sum(record["freq"] for record in values)
         point_attributes = [dict(key=classify_move(record["move"]),
-                                 value=dict(x=record["winRate"],
-                                            y=record["freq"] / games_played,
+                                 value=dict(x=record["freq"] / games_played,
+                                            y=record["winRate"],
                                             size=1,
                                             shape="square",
                                             move=record["move"]))
