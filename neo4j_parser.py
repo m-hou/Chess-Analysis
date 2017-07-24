@@ -82,7 +82,7 @@ def insert(amount=sys.maxsize):
 
 def main():
     """doc"""
-    insert(300)
+    insert()
 
 if __name__ == "__main__":
     main()
