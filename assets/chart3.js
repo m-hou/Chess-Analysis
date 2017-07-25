@@ -3,8 +3,6 @@ d3.json("assets/data_chart3.json", function (data) {
 
     nv.addGraph(function () {
         chart = nv.models.boxPlotChart()
-            .x(function (d) { return d.label })
-            .y(function (d) { return d.value })
             .maxBoxWidth(75); // prevent boxes from being incredibly wide
         chart.tooltip.contentGenerator(function (d) {
             var series = d.series;
