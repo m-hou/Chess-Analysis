@@ -3,13 +3,12 @@ d3.json("assets/data_chart1.json", function(data) {
     var chart;
 
     nv.addGraph(function() {
-        chart = nv.models.stackedAreaWithFocusChart()
+        chart = nv.models.stackedAreaChart()
             .useInteractiveGuideline(true)
             .x(function(d) { return d[0] })
             .y(function(d) { return d[1] })
             .controlLabels({stacked: "Stacked"})
             .duration(300);
-        chart.brushExtent([1000, 2800]);
         chart.xAxis.axisLabel("Elo");
         chart.yAxis.axisLabel("Games Played");
         d3.select('#chart1')
