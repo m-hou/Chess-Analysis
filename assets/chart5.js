@@ -1,7 +1,7 @@
+var chart;
+
 d3.json("assets/data_chart5.json", function (data) {
     // create the chart
-    var chart;
-
     nv.addGraph(function () {
         chart = nv.models.scatterChart()
             .showDistX(true)
@@ -55,6 +55,15 @@ d3.json("assets/data_chart5.json", function (data) {
         return chart;
     });
 });
+
+function updateData(url) {
+    d3.json(url, function(jsondata) {
+        d3.select('#chart5')
+          .datum(jsondata)
+          .transition().duration(500)
+          .call(chart);
+    });
+}
 
 var board,
     game = new Chess();
@@ -126,7 +135,7 @@ var onSnapEnd = function () {
 };
 
 var onChange = function (oldPos, newPos) {
-    console.log(game.fen());
+    updateData("assets/data_chart5.json")
 };
 
 var cfg = {
