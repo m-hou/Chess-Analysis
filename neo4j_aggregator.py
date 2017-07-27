@@ -43,20 +43,24 @@ HARDCODED_FENS = [
     "r4rk1/pp3ppp/2p1b3/4p2q/1P1bPP2/P1NB2P1/1BP3P1/R4R1K w - -"
 ]
 
+def generate_next_moves():
+    """doc"""
+    for fen in HARDCODED_FENS:
+        get_next_moves(fen)
 
-def query_db(query, parser, args=None):
+def query_db(query, parser, args=None, out_file=OUT_FILE):
     """doc"""
     driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
     result = session.run(query, args)
     data = parser(result)
     session.close()
-    with open(OUT_FILE, 'w') as outfile:
+    with open(out_file, 'w') as outfile:
         json.dump(data, outfile)
 
 
 @tools.timedcall
-def get_next_moves():
+def get_next_moves(fen):
     """doc"""
     def next_moves_parser(result):
         """doc"""
@@ -97,7 +101,8 @@ def get_next_moves():
             END
         ) AS winRate, count(g) AS freq""",
         next_moves_parser,
-        {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"}
+        {"fen": fen},
+        "assets/" + fen + ".json"
     )
 
 
@@ -151,7 +156,7 @@ def get_eval_range_by_time_control():
 
 def main():
     """doc"""
-    get_next_moves()
+    generate_next_moves()
 
 
 if __name__ == "__main__":
