@@ -135,7 +135,10 @@ var onSnapEnd = function () {
 };
 
 var onChange = function (oldPos, newPos) {
-    updateData("assets/data_chart5.json")
+    var boardStateFen = game.fen(newPos).split(" ").slice(0, -2).join(" ");
+    var fenReplaceSlash = boardStateFen.replace(new RegExp("/", 'g'), "_");
+    var dataFile = "assets/" + fenReplaceSlash + ".json"
+    updateData(dataFile)
 };
 
 var cfg = {
