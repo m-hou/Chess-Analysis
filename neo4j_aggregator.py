@@ -55,7 +55,7 @@ def query_db(query, parser, args=None, out_file=OUT_FILE):
     result = session.run(query, args)
     data = parser(result)
     session.close()
-    with open(out_file, 'w') as outfile:
+    with open("assets/" + out_file.replace("/", "_"), 'w') as outfile:
         json.dump(data, outfile)
 
 
@@ -102,7 +102,7 @@ def get_next_moves(fen):
         ) AS winRate, count(g) AS freq""",
         next_moves_parser,
         {"fen": fen},
-        "assets/" + fen + ".json"
+        fen + ".json"
     )
 
 
