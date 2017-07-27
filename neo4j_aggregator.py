@@ -100,6 +100,7 @@ def get_next_moves():
         {"fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"}
     )
 
+
 @tools.timedcall
 def get_avg_eval_by_ply():
     """doc"""
@@ -115,6 +116,7 @@ def get_avg_eval_by_ply():
         ORDER BY p.moveNumber""",
         avg_eval_by_ply_parser
     )
+
 
 @tools.timedcall
 def get_eval_range_by_time_control():
@@ -146,9 +148,11 @@ def get_eval_range_by_time_control():
         eval_range_by_time_control_parser
     )
 
+
 def main():
     """doc"""
     get_next_moves()
+
 
 if __name__ == "__main__":
     main()
