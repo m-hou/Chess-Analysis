@@ -152,3 +152,4 @@ var cfg = {
     onChange: onChange
 };
 board = ChessBoard('board', cfg);
+$(window).resize(board.resize);

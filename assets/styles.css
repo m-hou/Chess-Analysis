@@ -5,14 +5,25 @@ html {
 text {
     font: 12px sans-serif;
 }
-body, svg {
+body {
     margin: 0px;
     padding: 0px;
     height: 90vh;
-    width: 100%;
 }
 svg {
     display: block;
     margin-top: 10em;
     margin-bottom: 10em;
+}
+#board {
+    width: 40%;
+}
+#chart5 {
+    width: 60%;
+}
+#next-move-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 90vh;
 }
