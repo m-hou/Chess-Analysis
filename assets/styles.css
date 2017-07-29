@@ -19,6 +19,8 @@ svg {
     width: 60%;
 }
 #next-move-wrapper {
+    margin-top: 10em;
+    margin-bottom: 10em;
     display: flex;
     flex-direction: row;
     align-items: center;
