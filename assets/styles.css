@@ -2,6 +2,7 @@ html {
     margin: 0 auto;
     padding-top: 10vh;
     width: 80%;
+    font: 12px sans-serif;
 }
 text {
     font: 12px sans-serif;
@@ -29,4 +30,7 @@ svg {
 }
 #board-moves-wrapper {
     width: 40%;
+}
+h1 {
+    text-align: center;
 }
