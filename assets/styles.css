@@ -31,6 +31,9 @@ svg {
 #board-moves-wrapper {
     width: 40%;
 }
+#board {
+    margin: 1em;
+}
 h1 {
     text-align: center;
 }
