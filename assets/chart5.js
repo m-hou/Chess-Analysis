@@ -1,6 +1,6 @@
 var chart;
 
-d3.json("assets/data_chart5.json", function (data) {
+d3.json("assets/rnbqkbnr_pppppppp_8_8_8_8_PPPPPPPP_RNBQKBNR w KQkq -.json", function (data) {
     // create the chart
     nv.addGraph(function () {
         chart = nv.models.scatterChart()
@@ -57,11 +57,11 @@ d3.json("assets/data_chart5.json", function (data) {
 });
 
 function updateData(url) {
-    d3.json(url, function(jsondata) {
+    d3.json(url, function (jsondata) {
         d3.select('#chart5')
-          .datum(jsondata)
-          .transition().duration(500)
-          .call(chart);
+            .datum(jsondata)
+            .transition().duration(500)
+            .call(chart);
     });
 }
 
@@ -141,6 +141,11 @@ var onChange = function (oldPos, newPos) {
     updateData(dataFile)
 };
 
+var resetGame = function () {
+    game = new Chess();
+    board.start();
+}
+
 var cfg = {
     draggable: true,
     position: 'start',
@@ -151,5 +156,7 @@ var cfg = {
     onSnapEnd: onSnapEnd,
     onChange: onChange
 };
+
 board = ChessBoard('board', cfg);
 $(window).resize(board.resize);
+$('#resetBtn').on('click', resetGame);
