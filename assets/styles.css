@@ -15,9 +15,6 @@ svg {
     margin-top: 10em;
     margin-bottom: 10em;
 }
-#board {
-    width: 40%;
-}
 #chart5 {
     width: 60%;
 }
@@ -26,4 +23,7 @@ svg {
     flex-direction: row;
     align-items: center;
     height: 90vh;
+}
+#board-moves-wrapper {
+    width: 40%;
 }

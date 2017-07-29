@@ -14,16 +14,26 @@
 </head>
 
 <body>
+    <h2>Opening Frequency over Elo</h2>
     <svg id="chart1"></svg>
     <script src="assets/chart1.js"></script>
+    <h2>Win Rates Grouped by Opening</h2>
     <svg id="chart2"></svg>
     <script src="assets/chart2.js"></script>
+    <h2>Average Evaluation by Ply</h2>
     <svg id="chart3"></svg>
     <script src="assets/chart3.js"></script>
+    <h2>Range of Evaluation per Game Grouped by Time Control</h2>
     <svg id="chart4"></svg>
     <script src="assets/chart4.js"></script>
+    <h2>Win Rate and Play Rate of Moves by Position</h2>
     <div id="next-move-wrapper">
-        <div id="board"></div>
+        <div id="board-moves-wrapper">
+            <div id="board"></div>
+            <h3>Move Sequence</h3>
+            <h3>1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. f3 e5 7. Nb3 Be7 8. Be3 O-O 9. Qd2 Be6 10. O-O-O Nc6 11. Nd5 Nxd5 {Black resigns} 1-0</h3>
+        </div>
+
         <svg id="chart5"></svg>
     </div>
     <script src="assets/js/chessboard-0.3.0.min.js"></script>
