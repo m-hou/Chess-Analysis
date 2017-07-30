@@ -39,7 +39,7 @@ def parse_timecontrol(game):
 
 def insert(amount=sys.maxsize):
     """doc"""
-    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth("neo4j", "pass"))
+    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
     session = driver.session()
     for count, game in enumerate(pgn.GameIterator(config.NEO4J_DB_PATH)):
         timecontrol = parse_timecontrol(game)

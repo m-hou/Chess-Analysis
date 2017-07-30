@@ -51,7 +51,7 @@ def generate_next_moves():
 
 def query_db(query, parser, args=None, out_file=OUT_FILE):
     """doc"""
-    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth("neo4j", "pass"))
+    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
     session = driver.session()
     result = session.run(query, args)
     data = parser(result)
