@@ -2,17 +2,14 @@
 
 import json
 import sqlite3
+import config
 import tools
 
-DB_PATH = "chess.sqlite"
 OUT_FILE = "assets/data_chart2.json"
-MIN_ELO = 0
-MAX_ELO = 3000
-INCREMENT = 25
 
 def query_db(query, parser, *args):
     """doc"""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(config.DB_PATH)
     c = conn.cursor()
     c.execute(query, *args)
     data = parser(c.fetchall())
@@ -27,7 +24,7 @@ def query_play_rate():
         """doc"""
         def parse_freq_str(freq_str):
             """doc"""
-            elos = range(MIN_ELO, MAX_ELO + INCREMENT, INCREMENT)
+            elos = range(config.MIN_ELO, config.MAX_ELO + config.INCREMENT, config.INCREMENT)
             freqs = map(int, freq_str.split(","))
             return list(zip(elos, freqs))
 
@@ -51,7 +48,7 @@ def query_play_rate():
         ORDER BY SUM(frequency) DESC LIMIT 20
         """,
         play_rate_parser,
-        (MIN_ELO, INCREMENT, MAX_ELO, INCREMENT))
+        (config.MIN_ELO, config.INCREMENT, config.MAX_ELO, config.INCREMENT))
 
 @tools.timedcall
 def query_win_rate():

@@ -1,8 +1,7 @@
 """doc"""
 
 import sqlite3
-
-DB_PATH = "chess.sqlite"
+import config
 
 def eco_mapping(char, number):
     """doc"""
@@ -215,7 +214,7 @@ def eco_mapping(char, number):
 
 def main():
     """doc"""
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(config.DB_PATH)
     c = conn.cursor()
     c.execute("pragma foreign_keys=ON")
     try:

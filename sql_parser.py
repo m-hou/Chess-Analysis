@@ -2,10 +2,8 @@
 
 import sqlite3
 from sqlite3 import IntegrityError
+import config
 import pgn
-
-PGN_FILE = "ficsgamesdb_201701_chess_nomovetimes_1477065.pgn"
-DB_PATH = "chess.sqlite"
 
 def add_games_to_db(inputfile, outputfile):
     """doc"""
@@ -35,6 +33,7 @@ def add_games_to_db(inputfile, outputfile):
     conn.close()
 
 def parse_games(game):
+    """doc"""
     e = (game.eco,)
     time, increment = game.timecontrol.split("+")
     t = (time, increment,)
@@ -46,7 +45,7 @@ def parse_games(game):
 
 def main():
     """doc"""
-    add_games_to_db(PGN_FILE, DB_PATH)
+    add_games_to_db(config.SQL_PGN_FILE, config.DB_PATH)
 
 if __name__ == "__main__":
     main()
