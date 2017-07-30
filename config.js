@@ -1,0 +1,1 @@
+var dataPath = "assets/data/";

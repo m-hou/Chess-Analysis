@@ -1,6 +1,6 @@
 var chart;
 
-d3.json("assets/rnbqkbnr_pppppppp_8_8_8_8_PPPPPPPP_RNBQKBNR w KQkq -.json", function (data) {
+d3.json(dataPath + "rnbqkbnr_pppppppp_8_8_8_8_PPPPPPPP_RNBQKBNR w KQkq -.json", function (data) {
     // create the chart
     nv.addGraph(function () {
         chart = nv.models.scatterChart()
