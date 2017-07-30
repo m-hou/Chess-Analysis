@@ -112,4 +112,5 @@ ENV/
 
 *.sqlite
 *.pgn
+pgnfiles/pgn-extract.exe
 test_schema.txt
