@@ -6,7 +6,7 @@ import tools
 from neo4j.v1 import GraphDatabase, basic_auth
 
 DB_PATH = "bolt://localhost:7687"
-OUT_FILE = "assets/data_chart5.json"
+OUT_FILE = "data_chart4.json"
 
 HARDCODED_FENS = [
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
@@ -118,6 +118,7 @@ def get_avg_eval_by_ply():
     query_db(
         """
         MATCH (p:Ply)-[:HasPosition]->(pos:Position)
+        WHERE p.moveNumber <= 200
         RETURN p.moveNumber AS ply, AVG(TOFLOAT(pos.eval)) AS averageEval
         ORDER BY p.moveNumber""",
         avg_eval_by_ply_parser
@@ -157,7 +158,7 @@ def get_eval_range_by_time_control():
 
 def main():
     """doc"""
-    generate_next_moves()
+    get_avg_eval_by_ply()
 
 
 if __name__ == "__main__":
