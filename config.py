@@ -8,7 +8,7 @@ INCREMENT = 25
 ### PATHS ###
 
 # SOURCES
-SQL_PGN_FILE = "pgnfiles/ficsgamesdb_201701_chess_nomovetimes_1477065.pgn"
+SQL_PGN_FILE = "pgnfiles/ficsgamesdb_2016_chess_nomovetimes_1482742.pgn" # 12309953 games
 SQL_DB_PATH = "chess.sqlite"
 NEO4J_PGN_FILE = "pgnfiles/output.pgn"
 NEO4J_DB_PATH = "bolt://localhost:7687"
