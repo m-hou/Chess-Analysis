@@ -56,7 +56,7 @@ def query_db(query, parser, args=None, out_file=OUT_FILE):
     result = session.run(query, args)
     data = parser(result)
     session.close()
-    with open("assets/" + out_file.replace("/", "_"), 'w') as outfile:
+    with open(config.DATA_OUTPUT_PATH + out_file.replace("/", "_"), 'w') as outfile:
         json.dump(data, outfile)
 
 

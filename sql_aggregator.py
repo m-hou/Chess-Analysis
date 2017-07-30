@@ -5,7 +5,7 @@ import sqlite3
 import config
 import tools
 
-OUT_FILE = "assets/data_chart2.json"
+OUT_FILE = "data_chart2.json"
 
 def query_db(query, parser, *args):
     """doc"""
@@ -15,7 +15,7 @@ def query_db(query, parser, *args):
     data = parser(c.fetchall())
     conn.close()
     with open(OUT_FILE, 'w') as outfile:
-        json.dump(data, outfile)
+        json.dump(data, config.DATA_OUTPUT_PATH + outfile)
 
 @tools.timedcall
 def query_play_rate():
