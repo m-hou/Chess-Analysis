@@ -41,7 +41,7 @@ def insert(amount=sys.maxsize):
     """doc"""
     driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
     session = driver.session()
-    for count, game in enumerate(pgn.GameIterator(config.NEO4J_DB_PATH)):
+    for count, game in enumerate(pgn.GameIterator(config.NEO4J_PGN_FILE)):
         timecontrol = parse_timecontrol(game)
         gameid = "FICS" + game.ficsgamesdbgameno
         result = game.result
