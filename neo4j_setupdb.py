@@ -1,12 +1,11 @@
 """doc"""
 
 from neo4j.v1 import GraphDatabase, basic_auth
-
-DB_PATH = "bolt://localhost:7687"
+import config
 
 def query_db():
     """doc"""
-    driver = GraphDatabase.driver(DB_PATH, auth=basic_auth("neo4j", "pass"))
+    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth("neo4j", "pass"))
     session = driver.session()
     session.run("CREATE INDEX ON :Game(gameid)")
     session.run("CREATE INDEX ON :Position(fen)")

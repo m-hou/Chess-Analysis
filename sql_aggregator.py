@@ -9,7 +9,7 @@ OUT_FILE = "assets/data_chart2.json"
 
 def query_db(query, parser, *args):
     """doc"""
-    conn = sqlite3.connect(config.DB_PATH)
+    conn = sqlite3.connect(config.SQL_DB_PATH)
     c = conn.cursor()
     c.execute(query, *args)
     data = parser(c.fetchall())

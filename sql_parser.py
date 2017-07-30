@@ -45,7 +45,7 @@ def parse_games(game):
 
 def main():
     """doc"""
-    add_games_to_db(config.SQL_PGN_FILE, config.DB_PATH)
+    add_games_to_db(config.SQL_PGN_FILE, config.SQL_DB_PATH)
 
 if __name__ == "__main__":
     main()

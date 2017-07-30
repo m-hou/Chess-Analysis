@@ -214,7 +214,7 @@ def eco_mapping(char, number):
 
 def main():
     """doc"""
-    conn = sqlite3.connect(config.DB_PATH)
+    conn = sqlite3.connect(config.SQL_DB_PATH)
     c = conn.cursor()
     c.execute("pragma foreign_keys=ON")
     try:
