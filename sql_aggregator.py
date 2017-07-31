@@ -5,20 +5,18 @@ import sqlite3
 import config
 import tools
 
-OUT_FILE = "data_chart2.json"
-
-def query_db(query, parser, *args):
+def query_db(query, output_file_name, parser, *args):
     """doc"""
     conn = sqlite3.connect(config.SQL_DB_PATH)
     c = conn.cursor()
     c.execute(query, *args)
     data = parser(c.fetchall())
     conn.close()
-    with open(OUT_FILE, 'w') as outfile:
-        json.dump(data, config.DATA_OUTPUT_PATH + outfile)
+    with open(config.DATA_OUTPUT_PATH + output_file_name, 'w') as outfile:
+        json.dump(data, outfile)
 
 @tools.timedcall
-def query_play_rate():
+def query_play_rate(output_file_name):
     """doc"""
     def play_rate_parser(raw_data):
         """doc"""
@@ -47,11 +45,12 @@ def query_play_rate():
         ) GROUP BY opening
         ORDER BY SUM(frequency) DESC LIMIT 20
         """,
+        output_file_name,
         play_rate_parser,
         (config.MIN_ELO, config.INCREMENT, config.MAX_ELO, config.INCREMENT))
 
 @tools.timedcall
-def query_win_rate():
+def query_win_rate(output_file_name):
     """doc"""
     def win_rate_parser(raw_data):
         """doc"""
@@ -78,11 +77,15 @@ def query_win_rate():
 	        ORDER BY ((wins + ties / 2) * 1.0 / (wins + ties + losses)) DESC
         )
         """,
+        output_file_name,
         win_rate_parser)
 
 def main():
     """doc"""
-    query_win_rate()
+    if config.CHART_1:
+        query_play_rate("chart1.json")
+    if config.CHART_2:
+        query_win_rate("chart2.json")
 
 if __name__ == "__main__":
     main()

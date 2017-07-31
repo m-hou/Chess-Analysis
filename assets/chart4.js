@@ -1,4 +1,4 @@
-d3.json(dataPath + "assets/data_chart4.json", function(data) {
+d3.json(dataPath + "chart4.json", function(data) {
     var chart;
 
     nv.addGraph(function () {
