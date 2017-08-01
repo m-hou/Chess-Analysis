@@ -43,11 +43,11 @@ def query_play_rate(output_file_name):
             (Games.blackElo + Games.whiteElo) / 2 < EloRanges.elo + ?
             GROUP BY EloRanges.elo, Eco.openingName
         ) GROUP BY opening
-        ORDER BY SUM(frequency) DESC LIMIT 20
+        ORDER BY SUM(frequency) DESC LIMIT ?
         """,
         output_file_name,
         play_rate_parser,
-        (config.MIN_ELO, config.INCREMENT, config.MAX_ELO, config.INCREMENT))
+        (config.MIN_ELO, config.INCREMENT, config.MAX_ELO, config.INCREMENT, config.LIMIT_OF_OPENINGS))
 
 @tools.timedcall
 def query_win_rate(output_file_name):
