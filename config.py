@@ -8,7 +8,7 @@ CHART_2 = True # SQL
 CHART_3 = True # Neo4j
 CHART_4 = True # Neo4j
 CHART_5 = True # Neo4j
- 
+
 # CHART 1
 MIN_ELO = 0
 MAX_ELO = 3000
