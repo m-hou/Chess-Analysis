@@ -137,7 +137,7 @@ var onSnapEnd = function () {
 var onChange = function (oldPos, newPos) {
     var boardStateFen = game.fen(newPos).split(" ").slice(0, -2).join(" ");
     var fenReplaceSlash = boardStateFen.replace(new RegExp("/", 'g'), "_");
-    var dataFile = "assets/" + fenReplaceSlash + ".json"
+    var dataFile = dataPath + fenReplaceSlash + ".json"
     updateData(dataFile)
 };
 
