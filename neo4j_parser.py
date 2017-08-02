@@ -50,8 +50,8 @@ def insert(amount=sys.maxsize):
             args = {"currFen": fens[index], "currEval": evals[index],
                     "nextFen": fens[index+1], "nextEval" :evals[index+1],
                     "move": moves[index], "result": result,
-                    "gameid": gameid, "timecontrol": timecontrol,
-                    "blackelo": game.blackelo, "whiteelo": game.whiteelo, "ply": index + 1}
+                    "gameid": gameid, "timecontrol": timecontrol, "blackelo": game.blackelo,
+                    "whiteelo": game.whiteelo, "currPly": index, "nextPly": index + 1}
             if index == len(moves) - 1:
                 session.run(
                     """
@@ -61,8 +61,8 @@ def insert(amount=sys.maxsize):
                     MERGE (game:Game {result: {result}, gameid: {gameid},
                            whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
                     MERGE (game) -[:FinalPosition]-> (next)
-                    MERGE (ply:Ply {moveNumber: {ply}})
-                    MERGE (ply) -[:FinalPosition]-> (curr)""", args)
+                    MERGE (nextPly:Ply {moveNumber: {nextPly}})
+                    MERGE (nextPly) -[:FinalPosition]-> (next)""", args)
             else:
                 session.run(
                     """
@@ -72,8 +72,10 @@ def insert(amount=sys.maxsize):
                     MERGE (game:Game {result: {result}, gameid: {gameid},
                            whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
                     MERGE (game) -[:HasPosition]-> (next)
-                    MERGE (ply:Ply {moveNumber: {ply}})
-                    MERGE (ply) -[:HasPosition]-> (curr)""", args)
+                    MERGE (currPly:Ply {moveNumber: {currPly}})
+                    MERGE (currPly) -[:HasPosition]-> (curr)
+                    MERGE (nextPly:Ply {moveNumber: {nextPly}})
+                    MERGE (nextPly) -[:HasPosition]-> (next)""", args)
         print(count + 1)
         if count + 1 >= amount:
             break

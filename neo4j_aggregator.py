@@ -55,7 +55,7 @@ def get_next_moves(fen):
     query_db(
         """
         MATCH (:Position {fen: {fen}})-[m:Move]->(next:Position)
-        MATCH (next)-[:Move*..1000]->()<-[:FinalPosition]-(g:Game) WITH DISTINCT g, m
+        MATCH (next)-[:Move|FinalPosition*..1000]-[:FinalPosition]-(g:Game) WITH DISTINCT g, m
         RETURN m.move AS move, AVG(
             CASE g.result
                 WHEN '1-0' THEN 1
