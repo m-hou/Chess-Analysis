@@ -46,6 +46,7 @@ def get_next_moves(fen):
                                             shape="square",
                                             move=record["move"]))
                             for record in values]
+        print(str(len(point_attributes)) + " different moves found from this position")
         d = defaultdict(list)
         for point_attribute in point_attributes:
             d[point_attribute["key"]].append(point_attribute["value"])
