@@ -39,47 +39,48 @@ def parse_timecontrol(game):
 
 def insert(amount=sys.maxsize):
     """doc"""
-    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
-    session = driver.session()
-    for count, game in enumerate(pgn.GameIterator(config.NEO4J_PGN_FILE)):
-        timecontrol = parse_timecontrol(game)
-        gameid = "FICS" + game.ficsgamesdbgameno
-        result = game.result
-        moves, evals, fens = parse_move_comments(game)
-        for index, _ in enumerate(moves):
-            args = {"currFen": fens[index], "currEval": evals[index],
-                    "nextFen": fens[index+1], "nextEval" :evals[index+1],
-                    "move": moves[index], "result": result,
-                    "gameid": gameid, "timecontrol": timecontrol, "blackelo": game.blackelo,
-                    "whiteelo": game.whiteelo, "currPly": index, "nextPly": index + 1}
-            if index == len(moves) - 1:
-                session.run(
-                    """
-                    MERGE (curr:Position {fen: {currFen}, eval: {currEval}})
-                    MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
-                    MERGE (curr) -[:Move {move: {move}}]-> (next)
-                    MERGE (game:Game {result: {result}, gameid: {gameid},
-                           whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
-                    MERGE (game) -[:FinalPosition]-> (next)
-                    MERGE (nextPly:Ply {moveNumber: {nextPly}})
-                    MERGE (nextPly) -[:FinalPosition]-> (next)""", args)
-            else:
-                session.run(
-                    """
-                    MERGE (curr:Position {fen: {currFen}, eval: {currEval}})
-                    MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
-                    MERGE (curr) -[:Move {move: {move}}]-> (next)
-                    MERGE (game:Game {result: {result}, gameid: {gameid},
-                           whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
-                    MERGE (game) -[:HasPosition]-> (next)
-                    MERGE (currPly:Ply {moveNumber: {currPly}})
-                    MERGE (currPly) -[:HasPosition]-> (curr)
-                    MERGE (nextPly:Ply {moveNumber: {nextPly}})
-                    MERGE (nextPly) -[:HasPosition]-> (next)""", args)
-        print(count + 1)
-        if count + 1 >= amount:
-            break
-    session.close()
+    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(
+        config.NEO4J_USER, config.NEO4J_PASS))
+    with driver.session() as session:
+        for count, game in enumerate(pgn.GameIterator(config.NEO4J_PGN_FILE)):
+            timecontrol = parse_timecontrol(game)
+            gameid = "FICS" + game.ficsgamesdbgameno
+            result = game.result
+            moves, evals, fens = parse_move_comments(game)
+            for index, _ in enumerate(moves):
+                args = {"currFen": fens[index], "currEval": evals[index],
+                        "nextFen": fens[index + 1], "nextEval": evals[index + 1],
+                        "move": moves[index], "result": result,
+                        "gameid": gameid, "timecontrol": timecontrol, "blackelo": game.blackelo,
+                        "whiteelo": game.whiteelo, "currPly": index, "nextPly": index + 1}
+                if index == len(moves) - 1:
+                    session.run(
+                        """
+                        MERGE (curr:Position {fen: {currFen}, eval: {currEval}})
+                        MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
+                        MERGE (curr) -[:Move {move: {move}}]-> (next)
+                        MERGE (game:Game {result: {result}, gameid: {gameid},
+                            whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
+                        MERGE (game) -[:FinalPosition]-> (next)
+                        MERGE (nextPly:Ply {moveNumber: {nextPly}})
+                        MERGE (nextPly) -[:FinalPosition]-> (next)""", args)
+                else:
+                    session.run(
+                        """
+                        MERGE (curr:Position {fen: {currFen}, eval: {currEval}})
+                        MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
+                        MERGE (curr) -[:Move {move: {move}}]-> (next)
+                        MERGE (game:Game {result: {result}, gameid: {gameid},
+                            whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
+                        MERGE (game) -[:HasPosition]-> (next)
+                        MERGE (currPly:Ply {moveNumber: {currPly}})
+                        MERGE (currPly) -[:HasPosition]-> (curr)
+                        MERGE (nextPly:Ply {moveNumber: {nextPly}})
+                        MERGE (nextPly) -[:HasPosition]-> (next)""", args)
+            print(count + 1)
+            if count + 1 >= amount:
+                break
+
 
 def main():
     """doc"""

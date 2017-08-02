@@ -14,12 +14,11 @@ def generate_next_moves():
 def query_db(query, out_file_name, parser, args=None):
     """doc"""
     driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
-    session = driver.session()
-    result = session.run(query, args)
-    data = parser(result)
-    session.close()
-    with open(config.DATA_OUTPUT_PATH + out_file_name.replace("/", "_"), 'w') as outfile:
-        json.dump(data, outfile)
+    with driver.session() as session:
+        result = session.run(query, args)
+        data = parser(result)
+        with open(config.DATA_OUTPUT_PATH + out_file_name.replace("/", "_"), 'w') as outfile:
+            json.dump(data, outfile)
 
 
 @tools.timedcall
