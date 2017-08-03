@@ -65,6 +65,7 @@ NEO4J_PGN_FILE = "pgnfiles/output.pgn" # 34382 games 2017 Jan >2000 Elo
 NEO4J_DB_PATH = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
 NEO4J_PASS = "pass"
+NEO4J_GAME_INSERTS_PER_SESSION = 1000
 
 # OUTPUT
 DATA_OUTPUT_PATH = "assets/data/"
