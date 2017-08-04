@@ -5,11 +5,31 @@ from collections import defaultdict
 import config
 import tools
 from neo4j.v1 import GraphDatabase, basic_auth
+import neo4j_tools
+import pgn
 
-def generate_next_moves():
+
+def get_game():
     """doc"""
-    for fen in config.HARDCODED_FENS:
+    games = pgn.GameIterator(config.NEO4J_PGN_FILE)
+    for game in games:
+        if game.ficsgamesdbgameno == config.GAMEID:
+            return game
+
+
+def extract_game_data():
+    """doc"""
+    moves, _, fens = neo4j_tools.parse_move_comments(get_game())
+    with open(config.DATA_OUTPUT_PATH + "selected_game_moves.txt", 'w') as outfile:
+        outfile.write(str(moves))
+    generate_next_moves(fens)
+
+
+def generate_next_moves(fens):
+    """doc"""
+    for fen in fens:
         get_next_moves(fen)
+
 
 def query_db(query, out_file_name, parser, args=None):
     """doc"""
@@ -126,7 +146,7 @@ def main():
     if config.CHART_4:
         get_eval_range_by_time_control()
     if config.CHART_5:
-        generate_next_moves()
+        extract_game_data()
 
 
 if __name__ == "__main__":
