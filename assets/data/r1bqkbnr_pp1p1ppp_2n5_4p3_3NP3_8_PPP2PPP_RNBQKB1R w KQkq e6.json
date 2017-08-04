@@ -1,0 +1,1 @@
+[{"key": "Move", "values": [{"x": 0.025, "y": 0.2, "size": 1, "shape": "square", "move": "Nf3"}, {"x": 0.105, "y": 0.6190476190476192, "size": 1, "shape": "square", "move": "Nb3"}, {"x": 0.79, "y": 0.4588607594936709, "size": 1, "shape": "square", "move": "Nb5"}]}, {"key": "Capture", "values": [{"x": 0.08, "y": 0.25, "size": 1, "shape": "square", "move": "Nxc6"}]}]
