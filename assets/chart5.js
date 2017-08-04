@@ -160,3 +160,4 @@ var cfg = {
 board = ChessBoard('board', cfg);
 $(window).resize(board.resize);
 $('#resetBtn').on('click', resetGame);
+$('#moves').load(dataPath + "selected_game_moves.txt")
