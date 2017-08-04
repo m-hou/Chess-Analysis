@@ -6,7 +6,6 @@ d3.json(dataPath + "chart3.json", function (data) {
             .maxBoxWidth(75); // prevent boxes from being incredibly wide
         chart.tooltip.contentGenerator(function (d) {
             var series = d.series;
-            console.log(series[0])
             if (series.length == 1) {
                 var header =
                     "<thead>" +
