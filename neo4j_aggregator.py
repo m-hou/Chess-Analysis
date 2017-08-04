@@ -107,10 +107,12 @@ def get_avg_eval_by_ply():
     query_db(
         """
         MATCH (p:Ply)-[:HasPosition]->(pos:Position)
+        WHERE p.moveNumber <= {plyLimit}
         RETURN p.moveNumber AS ply, AVG(TOFLOAT(pos.eval)) AS averageEval
         ORDER BY p.moveNumber""",
         "chart4.json",
-        avg_eval_by_ply_parser
+        avg_eval_by_ply_parser,
+        {"plyLimit": config.PLY_LIMIT}
     )
 
 
