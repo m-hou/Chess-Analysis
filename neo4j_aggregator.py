@@ -92,7 +92,7 @@ def get_next_moves(fen):
         ) AS winRate, count(g) AS freq""",
         fen + ".json",
         next_moves_parser,
-        {"fen": fen},
+        {"fen": fen}
     )
 
 
