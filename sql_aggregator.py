@@ -5,6 +5,7 @@ import sqlite3
 import config
 import tools
 
+
 def query_db(query, output_file_name, parser, *args):
     """doc"""
     conn = sqlite3.connect(config.SQL_DB_PATH)
@@ -15,6 +16,7 @@ def query_db(query, output_file_name, parser, *args):
     with open(config.DATA_OUTPUT_PATH + output_file_name, 'w') as outfile:
         json.dump(data, outfile)
 
+
 @tools.timedcall
 def query_play_rate(output_file_name):
     """doc"""
@@ -22,7 +24,8 @@ def query_play_rate(output_file_name):
         """doc"""
         def parse_freq_str(freq_str):
             """doc"""
-            elos = range(config.MIN_ELO, config.MAX_ELO + config.INCREMENT, config.INCREMENT)
+            elos = range(config.MIN_ELO, config.MAX_ELO +
+                         config.INCREMENT, config.INCREMENT)
             freqs = map(int, freq_str.split(","))
             return list(zip(elos, freqs))
 
@@ -49,6 +52,7 @@ def query_play_rate(output_file_name):
         play_rate_parser,
         (config.MIN_ELO, config.INCREMENT, config.MAX_ELO, config.INCREMENT, config.LIMIT_OF_OPENINGS))
 
+
 @tools.timedcall
 def query_win_rate(output_file_name):
     """doc"""
@@ -58,7 +62,8 @@ def query_win_rate(output_file_name):
         return [dict(key=result,
                      values=[dict(x=opening, y=count)
                              for opening, count in stat_iter])
-                for result, stat_iter in zip(["White wins", "Draws", "Black wins"], [zip(opening, wins), zip(opening, draws), zip(opening, losses)])]
+                for result, stat_iter in zip(["White wins", "Draws", "Black wins"],
+                                             [zip(opening, wins), zip(opening, draws), zip(opening, losses)])]
 
     query_db(
         """
@@ -80,12 +85,14 @@ def query_win_rate(output_file_name):
         output_file_name,
         win_rate_parser)
 
+
 def main():
     """doc"""
     if config.CHART_1:
         query_play_rate("chart1.json")
     if config.CHART_2:
         query_win_rate("chart2.json")
+
 
 if __name__ == "__main__":
     main()

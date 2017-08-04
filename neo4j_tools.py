@@ -4,6 +4,7 @@ NUMBER_OF_COMMENTS = 2
 STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"
 STARTING_EVAL = 0.0
 
+
 def transform(sequence, index):
     """doc"""
     def transform_moves(moves):
@@ -20,6 +21,7 @@ def transform(sequence, index):
 
     transformations = [transform_moves, transform_evals, transform_fens]
     return transformations[index](sequence)
+
 
 def parse_move_comments(game):
     """doc"""

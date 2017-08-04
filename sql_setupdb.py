@@ -3,6 +3,7 @@
 import sqlite3
 import config
 
+
 def eco_mapping(char, number):
     """doc"""
     opening_name = ""
@@ -212,6 +213,7 @@ def eco_mapping(char, number):
             opening_sequence = "d4, Nf6, c4, g6"
     return (u'%s%02d' % (char, number), opening_name, opening_sequence,)
 
+
 def main():
     """doc"""
     conn = sqlite3.connect(config.SQL_DB_PATH)
@@ -267,6 +269,7 @@ def main():
                         VALUES (?,?,?)""", eco_mapping(char, number))
     conn.commit()
     conn.close()
+
 
 if __name__ == "__main__":
     main()

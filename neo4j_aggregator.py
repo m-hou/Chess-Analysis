@@ -24,7 +24,6 @@ def extract_game_data():
         return ' '.join((str(index // 2 + 1) + ". ") * (index % 2 == 0) + move
                         for index, move in enumerate(moves))
 
-
     moves, _, fens = neo4j_tools.parse_move_comments(get_game())
     with open(config.DATA_OUTPUT_PATH + "selected_game_moves.txt", 'w') as outfile:
         outfile.write(format_moves(moves))
@@ -39,7 +38,8 @@ def generate_next_moves(fens):
 
 def query_db(query, out_file_name, parser, args=None):
     """doc"""
-    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
+    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(
+        config.NEO4J_USER, config.NEO4J_PASS))
     with driver.session() as session:
         result = session.run(query, args)
         data = parser(result)
@@ -72,7 +72,8 @@ def get_next_moves(fen):
                                             shape="square",
                                             move=record["move"]))
                             for record in values]
-        print(str(len(point_attributes)) + " different moves found from this position")
+        print(str(len(point_attributes)) +
+              " different moves found from this position")
         d = defaultdict(list)
         for point_attribute in point_attributes:
             d[point_attribute["key"]].append(point_attribute["value"])

@@ -5,6 +5,7 @@ from sqlite3 import IntegrityError
 import config
 import pgn
 
+
 def add_games_to_db(inputfile, outputfile):
     """doc"""
     conn = sqlite3.connect(outputfile)
@@ -32,6 +33,7 @@ def add_games_to_db(inputfile, outputfile):
     conn.commit()
     conn.close()
 
+
 def parse_games(game):
     """doc"""
     e = (game.eco,)
@@ -43,9 +45,11 @@ def parse_games(game):
          game.eco, time, increment, gameid,)
     return e, t, g
 
+
 def main():
     """doc"""
     add_games_to_db(config.SQL_PGN_FILE, config.SQL_DB_PATH)
+
 
 if __name__ == "__main__":
     main()

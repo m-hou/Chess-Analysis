@@ -14,6 +14,7 @@ def parse_timecontrol(game):
         if timecontrol in game.event:
             return timecontrol.capitalize()
 
+
 def grouper(n, iterable, fillvalue=None):
     """doc"""
     args = [iter(iterable)] * n
@@ -22,8 +23,10 @@ def grouper(n, iterable, fillvalue=None):
 
 def insert(amount=sys.maxsize):
     """doc"""
-    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(config.NEO4J_USER, config.NEO4J_PASS))
-    game_groups = grouper(config.NEO4J_GAME_INSERTS_PER_SESSION, pgn.GameIterator(config.NEO4J_PGN_FILE))
+    driver = GraphDatabase.driver(config.NEO4J_DB_PATH, auth=basic_auth(
+        config.NEO4J_USER, config.NEO4J_PASS))
+    game_groups = grouper(config.NEO4J_GAME_INSERTS_PER_SESSION,
+                          pgn.GameIterator(config.NEO4J_PGN_FILE))
     count = 0
     for group in game_groups:
         with driver.session() as session:
@@ -37,8 +40,8 @@ def insert(amount=sys.maxsize):
                     for index, _ in enumerate(moves):
                         args = {"currFen": fens[index], "currEval": evals[index],
                                 "nextFen": fens[index + 1], "nextEval": evals[index + 1],
-                                "move": moves[index], "result": result,
-                                "gameid": gameid, "timecontrol": timecontrol, "blackelo": game.blackelo,
+                                "move": moves[index], "result": result, "gameid": gameid,
+                                "timecontrol": timecontrol, "blackelo": game.blackelo,
                                 "whiteelo": game.whiteelo, "currPly": index, "nextPly": index + 1}
                         if index == len(moves) - 1:
                             session.run(
@@ -47,7 +50,8 @@ def insert(amount=sys.maxsize):
                                 MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
                                 MERGE (curr) -[:Move {move: {move}}]-> (next)
                                 MERGE (game:Game {result: {result}, gameid: {gameid},
-                                    whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
+                                    whiteElo: {whiteelo}, blackElo: {blackelo},
+                                    timecontrol: {timecontrol}})
                                 MERGE (game) -[:FinalPosition]-> (next)
                                 MERGE (nextPly:Ply {moveNumber: {nextPly}})
                                 MERGE (nextPly) -[:FinalPosition]-> (next)""", args)
@@ -58,7 +62,8 @@ def insert(amount=sys.maxsize):
                                 MERGE (next:Position {fen: {nextFen}, eval: {nextEval}})
                                 MERGE (curr) -[:Move {move: {move}}]-> (next)
                                 MERGE (game:Game {result: {result}, gameid: {gameid},
-                                    whiteElo: {whiteelo}, blackElo: {blackelo}, timecontrol: {timecontrol}})
+                                    whiteElo: {whiteelo}, blackElo: {blackelo},
+                                    timecontrol: {timecontrol}})
                                 MERGE (game) -[:HasPosition]-> (next)
                                 MERGE (currPly:Ply {moveNumber: {currPly}})
                                 MERGE (currPly) -[:HasPosition]-> (curr)

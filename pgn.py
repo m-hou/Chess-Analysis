@@ -1,22 +1,22 @@
 # -*- coding:utf-8 -*-
 # Copyright (c) 2011 Renato de Pontes Pereira, renato.ppontes at gmail dot com
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy 
-# of this software and associated documentation files (the "Software"), to deal 
-# in the Software without restriction, including without limitation the rights 
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-# copies of the Software, and to permit persons to whom the Software is 
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all 
+# The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
 import re
@@ -51,9 +51,9 @@ class PGNGame(object):
                  'Mode', 'FEN']
 
     def __init__(self, event=None, site=None, date=None, round=None,
-                                                         white=None,
-                                                         black=None,
-                                                         result=None):
+                 white=None,
+                 black=None,
+                 result=None):
         """
         Initializes the PGNGame, receiving the requireds tags.
         """
@@ -79,6 +79,7 @@ class PGNGame(object):
 
     def __repr__(self):
         return '<PGNGame "%s" vs "%s">' % (self.white, self.black)
+
 
 def generate_games_str(file):
     """doc"""
@@ -117,6 +118,7 @@ class GameIterator(object):
             return game
         raise StopIteration
 
+
 def _pre_process_text(text):
     """
     This function is responsible for removal of end line commentarys 
@@ -149,7 +151,7 @@ def _next_token(lines):
         return token
 
     while lines and not lines[0].startswith('['):
-        token += ' '+lines.pop(0).strip()
+        token += ' ' + lines.pop(0).strip()
 
     return token.strip()
 
@@ -171,7 +173,7 @@ def _parse_moves(token):
         token = re.sub(r'^\s*(\d+\.+\s*)?', '', token)
 
         if token.startswith('{'):
-            pos = token.find('}')+1
+            pos = token.find('}') + 1
         else:
             pos1 = token.find(' ')
             pos2 = token.find('{')
@@ -240,8 +242,8 @@ def dumps(games):
         i = 0
         for move in game.moves:
             if not move.startswith('{'):
-                if i%2 == 0:
-                    dump += str(i/2+1)+'. '
+                if i % 2 == 0:
+                    dump += str(i / 2 + 1) + '. '
 
                 i += 1
 

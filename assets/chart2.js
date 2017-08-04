@@ -10,7 +10,7 @@ d3.json(dataPath + "chart2.json", function (data) {
                 .showControls(false)
                 .rotateLabels(-60)
                 .reduceXTicks(false)
-            chart.interactiveLayer.tooltip.valueFormatter(function(d) {
+            chart.interactiveLayer.tooltip.valueFormatter(function (d) {
                 return (d * 100).toFixed(2) + "%"
             })
             chart.xAxis

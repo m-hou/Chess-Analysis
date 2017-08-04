@@ -1,5 +1,8 @@
+"""doc"""
+
 import time
 from functools import update_wrapper
+
 
 def decorator(d):
     """doc"""
@@ -8,7 +11,9 @@ def decorator(d):
     update_wrapper(_d, d)
     return _d
 
+
 decorator = decorator(decorator)
+
 
 @decorator
 def timedcall(f):
