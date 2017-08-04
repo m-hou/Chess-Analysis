@@ -19,9 +19,15 @@ def get_game():
 
 def extract_game_data():
     """doc"""
+    def format_moves(moves):
+        """doc"""
+        return ' '.join((str(index // 2 + 1) + ". ") * (index % 2 == 0) + move
+                        for index, move in enumerate(moves))
+
+
     moves, _, fens = neo4j_tools.parse_move_comments(get_game())
     with open(config.DATA_OUTPUT_PATH + "selected_game_moves.txt", 'w') as outfile:
-        outfile.write(str(moves))
+        outfile.write(format_moves(moves))
     generate_next_moves(fens)
 
 
