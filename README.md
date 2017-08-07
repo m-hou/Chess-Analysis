@@ -53,3 +53,5 @@ My friend [Austin](https://github.com/ahendy) for playing chess with me at work 
 [Renatopp's PGNParser](https://github.com/renatopp/pgnparser), which I am using to help parse PGN files. The parser is written in Python 2.7, so I updated it (in my repo as `pgn.py`) to work for 3.6.
 
 [Novus' nvd3](https://github.com/nvd3-community/nvd3), which I used to create the charts.
+
+[Oakmac's chessboardjs](https://github.com/oakmac/chessboardjs), which I used for the interactive chess board
