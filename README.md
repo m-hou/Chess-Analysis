@@ -16,7 +16,7 @@ Step 1: Get PGN files
 Find a pgn file online from a game database. I would recommend [FICS Games Database](http://ficsgames.org/download.html) as the data from this source is very clean.
 
 Step 2: Clean up PGN files
-Download `pgn-extract.exe` from the repository resources and run it with cmd or terminal to clean up the PGN files.
+Download `pgn-extract.exe` (link in the contributors section) and run it with cmd or terminal to clean up the PGN files.
 
 Here are the commands I use:
 
@@ -54,4 +54,6 @@ My friend [Austin](https://github.com/ahendy) for playing chess with me at work 
 
 [Novus' nvd3](https://github.com/nvd3-community/nvd3), which I used to create the charts.
 
-[Oakmac's chessboardjs](https://github.com/oakmac/chessboardjs), which I used for the interactive chess board
+[Oakmac's chessboardjs](https://github.com/oakmac/chessboardjs), which I used for the interactive chess board.
+
+[David J. Barnes' pgn-extract](https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/), which I used to clean up pgn files
